@@ -64,7 +64,7 @@ class PluginTransCalc {
 
     	wp_enqueue_script( 'elementor-transport-calc' );
 		
-		wp_register_style( 'elementor-transport-calc', plugins_url( 'asset/css/style.css' ) );
+		wp_register_style( 'elementor-transport-calc',  plugins_url('/assets/css/style.css', __FILE__ )  );
 		wp_enqueue_style( 'elementor-transport-calc' );
   }
  
