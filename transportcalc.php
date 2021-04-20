@@ -63,6 +63,9 @@ class PluginTransCalc {
     	wp_register_script( 'elementor-transport-calc', plugins_url( '/assets/js/claculator.js', __FILE__ ), [ 'jquery', 'ymaps' ], false, true );
 
     	wp_enqueue_script( 'elementor-transport-calc' );
+		
+		wp_register_style( 'elementor-transport-calc', plugins_url( 'asset/css/style.css' ) );
+		wp_enqueue_style( 'elementor-transport-calc' );
   }
  
   /**
