@@ -127,7 +127,7 @@ class Transport_calc_widget extends Widget_Base {
 			$repeater->add_control(
 			('item_switcher').$i,
 			[
-				'label' => __( 'Visible', self::$slug ),
+				'label' => __( 'Visible block ', self::$slug ) .($i + 1),
 				'type' => \Elementor\Controls_Manager::SWITCHER,
 				'label_on' => __( 'Show', self::$slug ),
 				'label_off' => __( 'Hide', self::$slug ),
@@ -137,14 +137,14 @@ class Transport_calc_widget extends Widget_Base {
 	
 			$repeater->add_control(
 			('name').$i, [
-				'label' => __( 'Name'.$i, self::$slug ),
+				'label' => __( 'Name', self::$slug ).($i + 1),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => __( 'Name' , self::$slug ),
 				'label_block' => true,
 			]);
 		    $repeater ->add_control(
 			('value').$i, [
-				'label' => __( 'Value'.$i, self::$slug ),
+				'label' => __( 'Value', self::$slug ).($i + 1),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'default' => __( 'Value' , self::$slug ),
 				'label_block' => true,
@@ -208,7 +208,7 @@ class Transport_calc_widget extends Widget_Base {
 	echo '<div class="calculate-wrap-form">'.self::htmlbuilder_map().
 	'<form action="#" class="calculate-from">
 					<div class="calculate-from_top" id="calculate">
-					<div class="calculate-from-position flex">'.
+					<div class="calculate-from-position calculate-center flex">'.
 		 self::htmlbuilder_input('position__from', 'mapFrom', 'Откуда').
 		 '<div class="calculate-from-position__dist"><span id="distance"></span></div>'.
 		 self::htmlbuilder_input('position__to', 'mapTo', 'Куда').
@@ -220,13 +220,13 @@ class Transport_calc_widget extends Widget_Base {
 		'</div><div class="calculate-from-data-two flex">'.
 		self::htmlbuilder_button().
 
-	'<div class="calculate-from-data-two__text flex">Полный расчет стоимости переезда происходит во время погрузки</div>
+	'<div class="calculate-from-data-two__text calculate-center flex">Полный расчет стоимости переезда происходит во время погрузки</div>
 	</div>
 	</div>
 
 	</div>'.
 '</div></form>'.
-	 $this->detalis();		
+	 $this->detalis() . self::htmlbuilder_popupform();		
 	}	
 
 	public static function htmlbuilder_map($class = 'calculate-map' , $id = 'map'){
@@ -259,7 +259,7 @@ class Transport_calc_widget extends Widget_Base {
 	
 	public static function htmlbuilder_button(){
 		return '<div class="calculate-from-data-two-button">
-		<button class="big-button send-calc-result">
+		<button class="big-button calculate-center" id="send-calc-result">
 			<div class="button-price"><span id="calc-price">0</span> <span>₽ </span></div>
 			Отправить заявку
 		</button>
@@ -275,7 +275,7 @@ class Transport_calc_widget extends Widget_Base {
 
 		$calculate_disabled = ('yes' != $block['active_switcher'] ? 'calculate-disabled' : '');
 		$block_price_show = ('yes' === $block['block_price_show'] ? '<div class="calculate-from-detailed-block__price">0 <span class="currency-symbol">Р</span></div>' : '');
-		$block_price_show = ('yes' === $block['block_title_show'] ? '<div class="calculate-from-detailed-block__check flex">
+		$block_price_title = ('yes' === $block['block_title_show'] ? '<div class="calculate-from-detailed-block__check flex">
 										<div class="squaredFour">
 											<input type="checkbox" class="lading-discharging" id="lading" name="lading" />
 											<label for="lading"></label>
@@ -286,8 +286,8 @@ class Transport_calc_widget extends Widget_Base {
 
 
 		$html = '<div class="'.$block['block_selector'].' calculate-from-detailed-block '.$colums .' '.
-		$calculate_disabled.' flex">
-				<div class="calculate-from-detailed-block-wrap">'.$block_price_show.
+		$calculate_disabled.' flex calculate-center">
+				<div class="calculate-from-detailed-block-wrap calculate-center" >'.$block_price_title.$block_price_show.
 		'<div class="calculate-from-detailed-block-total">' . $block_foor_show;	
 
 
@@ -310,7 +310,7 @@ class Transport_calc_widget extends Widget_Base {
 		
 		for ($i = 0; $i < 3 ; $i++) { 
 		if($block['item_switcher'.$i] === 'yes')	
-		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="'.'">
+		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="'.$block['value'.$i].'">
 					<label for="check1">'.$block['name'.$i].'</label>';
 
 		//if($block['tooltip'.$i] === 'yes')
@@ -323,16 +323,44 @@ class Transport_calc_widget extends Widget_Base {
 
 		public static function htmlbuilder_block_check_list($block)
 		{
-			$html = '<div class="calculate-from-detailed-block-list-item">';
+			$html = '<div class="calculate-from-detailed-block-list-item chk-label">';
 
 			for ($i = 0; $i < 3 ; $i++) { 
 				if($block['item_switcher'.$i] === 'yes'){
-
+		$html .=
+  '<input id="check1" type="checkbox" class="oversized" name="option'.$i.'" value="'.$block['value'.$i].'" 
+  data-persent="'.$block['present'.$i].'" >
+  <label for="check1">'.$block['name'.$i].'</label><br />';		
 				}
 			}
 
 
 			$html .= '</div>';
+
+			return $html;
+		}
+
+		public static function htmlbuilder_popupform() {
+			$html = '<div id="transport_calc_popup" class="modal">
+  						<div class="modal-content">
+    						<span id="close-modal">&times;</span>
+   							<div class="popup__from">
+    <span class="wpcf7-form-control-wrap you-name"><input type="text" name="you-name" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required popup__name" aria-required="true" aria-invalid="false" placeholder="Имя"></span><br>
+    <span class="wpcf7-form-control-wrap your-tel"><input type="tel" name="your-tel" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel popup__tel" aria-required="true" aria-invalid="false" placeholder="+7(__)__-__-__"></span><br>
+    <span class="wpcf7-form-control-wrap your-mail"><input type="email" name="your-mail" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-email popup__email" aria-invalid="false" placeholder="Почта"></span><br>
+    <input type="submit" value="Отправить заявку" class="wpcf7-form-control wpcf7-submit" disabled=""><span class="ajax-loader"></span><p></p>
+<input type="hidden" name="result" value="" class="wpcf7-form-control wpcf7-hidden" id="calcresult">
+<div class="popup-check">
+    <span class="wpcf7-form-control-wrap acceptance-761"><span class="wpcf7-form-control wpcf7-acceptance"><span class="wpcf7-list-item"><input type="checkbox" name="acceptance-761" value="1" aria-invalid="false"></span></span></span><br>
+        <span><br>
+            Заполняя форму обратной связи на сайте www.kangor.ru,<br>
+            я даю согласие на обработку своих персональных данных<br>
+        </span>
+    </div>
+</div>
+  						</div>
+					</div>';
+
 
 			return $html;
 		}

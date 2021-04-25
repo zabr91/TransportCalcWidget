@@ -79,11 +79,13 @@ class PluginTransportCalc {
    */
   private function include_widgets_files() {
     require_once( __DIR__. '/widgets/transport_calc_widget.php' );
-    require_once( __DIR__. '/widgets/transport_calc_map_widget.php' );
+
+    //add to beta version 
+   /* require_once( __DIR__. '/widgets/transport_calc_map_widget.php' );
     require_once( __DIR__. '/widgets/transport_calc_field_from_widget.php' );
     require_once( __DIR__. '/widgets/transport_calc_field_to_widget.php' );
     require_once( __DIR__. '/widgets/transport_calc_field_size_widget.php' );
-    require_once( __DIR__. '/widgets/transport_calc_field_mass_widget.php' );
+    require_once( __DIR__. '/widgets/transport_calc_field_mass_widget.php' );*/
   }
  
   /**
@@ -99,11 +101,11 @@ class PluginTransportCalc {
     $this->include_widgets_files();    
 
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_widget() );
-    Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_map_widget() );
+  /*  Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_map_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_from_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_to_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_size_widget() );
-    Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_mass_widget() );
+    Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_mass_widget() );*/
   }
 
   function register_categories( $elements_manager ) {

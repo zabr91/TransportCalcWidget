@@ -21,6 +21,20 @@ jQuery(function ($) {
         var inputSize = $('input#size');
         var inputMass = $('input#mass');
 
+        var modalWindow = $('#transport_calc_popup');
+        var submitBtn = $('#send-calc-result');
+        var closeWindow = $('#close-modal');
+
+        submitBtn.on("click", function(e){ 
+		e.preventDefault();
+		modalWindow.fadeIn(300);
+		});
+
+		closeWindow.on("click", function(e){ 
+		e.preventDefault();
+		modalWindow.fadeOut(300);
+		});
+
 
 		if(appSettings['map']) { appInit();};
 
@@ -139,16 +153,12 @@ jQuery(function ($) {
 			}
 		}
 
-
-		//function kgToMcub(kg){ return parseFloat(kg * 0.00666667).toFixed(2);}
-
 		function tonnaToMcub(tonna){ return parseFloat((tonna * 1000) * 0.00666667).toFixed(2);}
-
-
-		//function mcubTokg(mCub){ return parseInt(mCub / 0.0066665).toFixed(2); }
 
 		function mcubTotonna(mCub){ return parseFloat((mCub / 0.0066665) / 1000).toFixed(2); }
 
 	});
+
+	
 
 });

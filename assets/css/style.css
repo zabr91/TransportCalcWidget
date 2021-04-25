@@ -5,6 +5,12 @@
 .calculate-wrap-form, .calculate-from_bottom-wrap {
     background: #fff;
 }
+.calculate-center{
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center   
+}
 
 
 
@@ -27,10 +33,6 @@
     -ms-flex-pack: justify;
     -webkit-justify-content: space-between;
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
     background-color: #ffae00;
     -webkit-border-radius: 36px;
     border-radius: 36px;
@@ -73,10 +75,6 @@
 }
 
 .calculate-from-data-two__text {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
     position: relative;
     opacity: 0.56;
     color: #000000;
@@ -123,10 +121,6 @@
     position: relative;
     -webkit-border-radius: 6px;
     border-radius: 6px;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
     color: #ffffff;
     font-size: 18px;
     font-weight: 700;
@@ -179,14 +173,6 @@
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
-    position: relative;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
     justify-content: center;
     margin-bottom: -1px;
     z-index: 1;
@@ -232,10 +218,11 @@
 
 .calculate-from-detailed-block {
     -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
+-ms-flex-pack: center;
+-webkit-justify-content: center;
+justify-content: center;
     padding: 0px 40px 40px 40px;
+
 }
 
 .calculate-from-detailed-block__price {
@@ -271,10 +258,6 @@
     font-weight: 700;
     text-transform: uppercase;
     position: relative;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     -webkit-justify-content: center;
@@ -401,7 +384,7 @@ button.tooltip-btn {
     align-items: center;
 }
 
-.calculate-from-detailed-block-list-item input {
+.calculate-from-detailed-block-list-item input[type=radio] {
     opacity: 0;
     position: absolute;
     right: 0;
@@ -414,6 +397,7 @@ button.tooltip-btn {
     transition: .4s;
 
 }
+
 
 .calculate-from-data-one label {
     padding-bottom: 20px;
@@ -517,6 +501,59 @@ button.tooltip-btn {
 }
 
 
+
+.chk-label > label {
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.chk-label > label > input{
+    width: 12px;
+    height: 12px;
+    position: unset;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 /*Media*/
 @media (max-width: 991px){
 .calculate-from-position {
