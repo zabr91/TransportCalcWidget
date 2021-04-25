@@ -10,14 +10,13 @@
  */
 namespace Transport_Calc;
 
+include_once 'TransportCalcMath.php';
+
 use Elementor\Plugin;
 
-// Instantiate Plugin Class
-//Plugin::instance();
+$plugin = new PluginTransportCalc();
 
-$plugin = new PluginTransCalc();
-
-class PluginTransCalc {
+class PluginTransportCalc {
  
   /**
    * Instance
@@ -59,10 +58,12 @@ class PluginTransCalc {
    * @access public
    */
   public function widget_scripts() {
-    	wp_enqueue_script( 'ymaps', 'https://api-maps.yandex.ru/2.1/?apikey='.self::$yandex_maps_api.'&lang=ru_RU', null, false, true );
-    	wp_register_script( 'elementor-transport-calc', plugins_url( '/assets/js/claculator.js', __FILE__ ), [ 'jquery', 'ymaps' ], false, true );
+    wp_enqueue_script( 'ymaps', 'https://api-maps.yandex.ru/2.1/?apikey='.self::$yandex_maps_api.'&lang=ru_RU', null, false, true );
+    wp_register_script( 'elementor-transport-calc', plugins_url( '/assets/js/claculator.js', __FILE__ ), [ 'jquery', 'ymaps' ], false, true );
 
-    	wp_enqueue_script( 'elementor-transport-calc' );
+    wp_enqueue_script( 'elementor-transport-calc' );
+
+    wp_localize_script( 'elementor-transport-calc', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		
 		wp_register_style( 'elementor-transport-calc',  plugins_url('/assets/css/style.css', __FILE__ )  );
 		wp_enqueue_style( 'elementor-transport-calc' );
@@ -95,20 +96,14 @@ class PluginTransCalc {
    */
   public function register_widgets() {
     // Its is now safe to include Widgets files
-    $this->include_widgets_files();
+    $this->include_widgets_files();    
 
-    
-
-    Plugin::instance()->widgets_manager->register_widget_type( new 
-      Transport_calc_widget() );
+    Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_map_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_from_widget() );
-   Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_to_widget() );
+    Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_to_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_size_widget() );
     Plugin::instance()->widgets_manager->register_widget_type( new Transport_calc_field_mass_widget() );
-
-    // Register Widgets
-    //ElementorPlugin::instance()->widgets_manager->register_widget_type( new Transport_calc_widget() );
   }
 
   function register_categories( $elements_manager ) {
@@ -121,6 +116,28 @@ class PluginTransCalc {
     ]
   );
   }
+
+  public function ajax_get_price() {
+    $distance = (float)$_REQUEST['distance'];
+    $weight = (float)$_REQUEST['weight'];
+    $volume = (float)$_REQUEST['volume'];
+    
+    $result = [
+      'status' => 'OK',
+      'result' => TransportCalcMath::calculate($distance, $weight, $volume),
+    //  'var_dump' => 'D: '.$distance . ' W:'. $weight . ' V:' . $volume
+    ];
+
+    echo json_encode( $result );
+
+    wp_die();
+  }
+
+  public function ajax_scripts() {
+   
+    wp_enqueue_script(  'ajaxHandle');
+}
+
  
   /**
    *  Plugin class constructor
@@ -130,8 +147,9 @@ class PluginTransCalc {
    * @since 1.2.0
    * @access public
    */
-  public function __construct() {
+  public function __construct() {     
 
+   //  add_action('wp_enqueue_scripts', [$this, 'ajax_scripts']);
     //Register category
     add_action( 'elementor/elements/categories_registered',  [ $this, 'register_categories' ]);
  
@@ -140,5 +158,13 @@ class PluginTransCalc {
  
     // Register widgets
     add_action( 'elementor/widgets/widgets_registered', [ $this, 'register_widgets' ] );
+
+    // wp-admin/admin-ajax.php?action=get_price&distance=196&weight=&volume=9
+    /*
+    * 196, 1.2, 9
+    */
+    add_action( 'wp_ajax_get_price',        [ $this, 'ajax_get_price'] );
+    
+    add_action( 'wp_ajax_nopriv_get_price', [ $this, 'ajax_get_price'] );
   }
 }
