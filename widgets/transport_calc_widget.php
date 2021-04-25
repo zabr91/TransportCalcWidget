@@ -109,6 +109,18 @@ class Transport_calc_widget extends Widget_Base {
 				'default' => 'yes',
 			]
 		);
+		$repeater->add_control(
+			'list_style',
+			[
+				'label' => __( 'List Style', ' self::$slug ' ),
+				'type' => \Elementor\Controls_Manager::SELECT,
+				'default' => 'solid',
+				'options' => [
+					'check'  => __( 'Check', self::$slug ),
+					'radio' => __( 'Radio', self::$slug ),
+				],
+			]
+		);
 
 		for ($i=0; $i < 3 ; $i++) {
 
@@ -242,6 +254,8 @@ class Transport_calc_widget extends Widget_Base {
 		$html .= "</select>";
 		return $html;
 	}
+
+
 	
 	public static function htmlbuilder_button(){
 		return '<div class="calculate-from-data-two-button">
@@ -273,15 +287,22 @@ class Transport_calc_widget extends Widget_Base {
 
 		$html = '<div class="'.$block['block_selector'].' calculate-from-detailed-block '.$colums .' '.
 		$calculate_disabled.' flex">
-				<div class="calculate-from-detailed-block-wrap">'.$block_price_show.$block_price_show.
+				<div class="calculate-from-detailed-block-wrap">'.$block_price_show.
 		'<div class="calculate-from-detailed-block-total">' . $block_foor_show;	
 
-		$html .= '</div>'.self::htmlbuilder_block_list($block).'</div>';
+
+		if($block['list_style'] === 'radio')
+		{
+			$html .= '</div>'.self::htmlbuilder_block_radio_list($block).'</div>';
+		}
+		else{
+			$html .= '</div>'.self::htmlbuilder_block_check_list($block).'</div>';
+		}
 
 		return $html;
 	}
 
-	public static function htmlbuilder_block_list($block)
+	public static function htmlbuilder_block_radio_list($block)
 	{
 		$html = '<div class="calculate-from-detailed-block-list-item">
 				<input type="radio" name="loding" class="default d-none" value="без лифта" checked>';
@@ -289,7 +310,7 @@ class Transport_calc_widget extends Widget_Base {
 		
 		for ($i = 0; $i < 3 ; $i++) { 
 		if($block['item_switcher'.$i] === 'yes')	
-		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="негабарит">
+		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="'.'">
 					<label for="check1">'.$block['name'.$i].'</label>';
 
 		//if($block['tooltip'.$i] === 'yes')
@@ -299,6 +320,24 @@ class Transport_calc_widget extends Widget_Base {
 		$html .= '</div></div>';
 		return $html;
 	}
+
+		public static function htmlbuilder_block_check_list($block)
+		{
+			$html = '<div class="calculate-from-detailed-block-list-item">';
+
+			for ($i = 0; $i < 3 ; $i++) { 
+				if($block['item_switcher'.$i] === 'yes'){
+
+				}
+			}
+
+
+			$html .= '</div>';
+
+			return $html;
+		}
+
+
 
 	private function detalis()
 	{
