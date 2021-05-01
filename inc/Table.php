@@ -17,7 +17,7 @@ add_action( 'admin_menu', function(){
 } );
 
 function example_table_page_load(){
-	require_once __DIR__ . '/class-Example_List_Table.php'; // тут находится класс Example_List_Table...
+	require_once __DIR__ . '/Example_List_Table.php'; // тут находится класс Example_List_Table...
 
 	// создаем экземпляр и сохраним его дальше выведем
 	$GLOBALS['Example_List_Table'] = new Example_List_Table();

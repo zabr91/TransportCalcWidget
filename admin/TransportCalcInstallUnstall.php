@@ -6,7 +6,7 @@ $transportCalcInstallUnstall = new TransportCalcInstallUnstall();
 class TransportCalcInstallUnstall
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
 		register_activation_hook( __FILE__, [&$this, 'create_plugin_tables'] );
 		register_uninstall_hook( __FILE__, [&$this, 'drop_plugin_tables']);

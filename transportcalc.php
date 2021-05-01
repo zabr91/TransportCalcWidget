@@ -25,6 +25,7 @@ define( 'TCW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 include_once TCW_PLUGIN_DIR.'inc/TransportCalcMath.php';
 include_once TCW_PLUGIN_DIR.'admin/TransportCalcSettings.php';
 include_once TCW_PLUGIN_DIR.'admin/TransportCalcInstallUnstall.php';
+include_once TCW_PLUGIN_DIR.'inc/Table.php';
 
 
 use Elementor\Plugin;
