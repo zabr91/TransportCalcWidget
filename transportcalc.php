@@ -10,7 +10,22 @@
  */
 namespace Transport_Calc;
 
-include_once 'TransportCalcMath.php';
+if ( ! defined( 'ABSPATH' ) ) {
+  exit;
+}
+
+
+
+define( 'TCW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'TCW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'TCW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+
+
+
+include_once TCW_PLUGIN_DIR.'inc/TransportCalcMath.php';
+include_once TCW_PLUGIN_DIR.'admin/TransportCalcSettings.php';
+include_once TCW_PLUGIN_DIR.'admin/TransportCalcInstallUnstall.php';
+
 
 use Elementor\Plugin;
 
@@ -59,6 +74,7 @@ class PluginTransportCalc {
    */
   public function widget_scripts() {
     wp_enqueue_script( 'ymaps', 'https://api-maps.yandex.ru/2.1/?apikey='.self::$yandex_maps_api.'&lang=ru_RU', null, false, true );
+    
     wp_register_script( 'elementor-transport-calc', plugins_url( '/assets/js/claculator.js', __FILE__ ), [ 'jquery', 'ymaps' ], false, true );
 
     wp_enqueue_script( 'elementor-transport-calc' );
@@ -66,7 +82,8 @@ class PluginTransportCalc {
     wp_localize_script( 'elementor-transport-calc', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		
 		wp_register_style( 'elementor-transport-calc',  plugins_url('/assets/css/style.css', __FILE__ )  );
-		wp_enqueue_style( 'elementor-transport-calc' );
+		
+    wp_enqueue_style( 'elementor-transport-calc' );
   }
  
   /**
@@ -127,7 +144,6 @@ class PluginTransportCalc {
     $result = [
       'status' => 'OK',
       'result' => TransportCalcMath::calculate($distance, $weight, $volume),
-    //  'var_dump' => 'D: '.$distance . ' W:'. $weight . ' V:' . $volume
     ];
 
     echo json_encode( $result );
@@ -135,12 +151,6 @@ class PluginTransportCalc {
     wp_die();
   }
 
-  public function ajax_scripts() {
-   
-    wp_enqueue_script(  'ajaxHandle');
-}
-
- 
   /**
    *  Plugin class constructor
    *
@@ -149,9 +159,10 @@ class PluginTransportCalc {
    * @since 1.2.0
    * @access public
    */
-  public function __construct() {     
+  public function __construct() {
 
-   //  add_action('wp_enqueue_scripts', [$this, 'ajax_scripts']);
+    self::$yandex_maps_api = get_option('TransportCalc')['yandex_api'];
+
     //Register category
     add_action( 'elementor/elements/categories_registered',  [ $this, 'register_categories' ]);
  
@@ -161,12 +172,9 @@ class PluginTransportCalc {
     // Register widgets
     add_action( 'elementor/widgets/widgets_registered', [ $this, 'register_widgets' ] );
 
-    // wp-admin/admin-ajax.php?action=get_price&distance=196&weight=&volume=9
-    /*
-    * 196, 1.2, 9
-    */
     add_action( 'wp_ajax_get_price',        [ $this, 'ajax_get_price'] );
     
     add_action( 'wp_ajax_nopriv_get_price', [ $this, 'ajax_get_price'] );
-  }
+
+    }
 }
