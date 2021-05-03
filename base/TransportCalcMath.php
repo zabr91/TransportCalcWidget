@@ -1,67 +1,41 @@
 <?php
 
-/**
- * 
- */
-
-namespace Transport_Calc;
-
+namespace TransportCalc;
 
 class TransportCalcMath
 {
 	//private $cars;;
-    private static $cars;
+    private static $car;
 
-    public static function calculate($distance, $weight, $volume, $refrigerator = false){
+    public static function calculate($distance = 0, $weight = 0, $volume = 0, $parms = null)  {
 
-        self::$cars = new BaseCustomData('tc_price');
+       $price = 0;
 
-        $distance = round( strip_tags( $distance )) ;
-        $weight   = strip_tags( $weight );
-        $volume   = strip_tags( $volume );
-        
-    	
-       if($distance < 0 || $weight < 0 || $volume < 0) { return 0; }
+       $currentCar = new BaseCustomData("tc_price");
+       $conditionValue = [
+        'distance' => $distance,
+        'weight' => $weight,
+        'volume' => $volume
+       ];
+       $car = $currentCar->get_by($conditionValue, '>', 'distance');
 
-       $price = self::calcPriceByDispanseWeightVolume($distance, $weight, $volume);
+      
+       $priceCalc = $distance * $car[0]->price;
 
-       if($refrigerator) self::calcRefrigerator($price);
+       if($weight > 90) {
+        $priceCalc = $priceCalc * 2;
+       }
+
+
+       foreach ($parms as $parm) {
+         # code...
+       }
+
+       $price = ["price" =>$distance * $car[0]->price,
+       'msg' => $car[0]->msg];
 
        return $price;
 
-    }
-
-    public static function getCarByWeightVolume($weight, $volume){
-
-        echo "GET CAR";
-
-        wp_die();
-
-    	/*$countCars = count(self::$cars);
-
-    	for ($i = 0; $i < $countCars; $i++) {
-    		if(self::$cars[$i]['weight'] >= $weight &&
-                self::$cars[$i]['volume'] >= $volume)
-    	      { 
-                return $i;
-                break;
-              }
-    	}
-        return -1;*/
-    }
-
-    public static function calcPriceByDispanseWeightVolume($distance,$weight, $volume){
-
-        $carNum = self::getCarByWeightVolume($weight, $volume);
-        $result = self::$cars[$carNum]['price'] * $distance;
-        if($distance < 200) $result = $result * 2;
-
-        return $result;
-    }
-
-    public static function calcRefrigerator($price){
-        return $price + ($price * 0.1); 
-    }
-	
+    }	
 
 }

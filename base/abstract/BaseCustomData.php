@@ -3,6 +3,8 @@
  * Abstract class which has helper functions to get data from the database
  */
 
+namespace TransportCalc;
+
 
 class BaseCustomData
 {
@@ -78,9 +80,12 @@ class BaseCustomData
      *
      * @return Table result
      */
-    public function get_by(array $conditionValue, $condition = '=')
+    public function get_by(array $conditionValue, $condition = '=', $orderBy = NULL)
     {
         global $wpdb;
+
+        $startCount = 1;
+        $conditionCount = count($conditionValue);
 
         $sql = 'SELECT * FROM `'.$this->tableName.'` WHERE ';
 
@@ -97,9 +102,26 @@ class BaseCustomData
                 break;
 
                 default:
-                    $sql .= $wpdb->prepare('`'.$field.'` '.$condition.' %s', $value);
+                    $and = null;
+
+                    if($conditionCount > $startCount) 
+                        {
+                            $sql .= $wpdb->prepare('`'.$field.'` '.$condition.' %s AND ', $value);
+                        }
+                        else{
+                             $sql .= $wpdb->prepare('`'.$field.'` '.$condition.' %s', $value);
+                        }
+
+
+                   
                 break;
             }
+            $startCount++;
+        }
+
+        if(!empty($orderBy))
+        {
+            $sql .= ' ORDER BY ' . $orderBy;
         }
 
         $result = $wpdb->get_results($sql);

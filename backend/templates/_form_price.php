@@ -13,6 +13,10 @@
 	<input type="text" name="description" value="<?= isset($values[0]->description) ? $values[0]->description : "" ?>">
 </label></p>
 <p><label>
+	Distanse
+	<input type="text" name="distanse" value="<?= isset($values[0]->distanse) ? $values[0]->distanse : "" ?>">
+</label></p>
+<p><label>
 	Weight
 	<input type="text" name="weight" value="<?= isset($values[0]->weight) ? $values[0]->weight : "" ?>">
 </label></p>

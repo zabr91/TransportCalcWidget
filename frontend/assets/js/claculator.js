@@ -59,6 +59,10 @@ jQuery(function ($) {
 			inputSize.bind("keyup change wheel", function(){
 			  var c1, c2, b1, b2;
 
+			  /* if(inputMass.val() < 0.5) {
+			   	inputMass.value = 0.5;
+			   }*/
+
 			   c1 = inputSize.val();
 			   c2 = inputMass.val();
 
@@ -122,6 +126,23 @@ jQuery(function ($) {
 		};
 
 		function calculateDistancePrice(distance) {
+
+			var calcOptions = $(".calc-options:checked");
+			var countChekedOptions = calcOptions.length;
+
+			var parms = [];
+
+			if(countChekedOptions > 0) {
+				for (var i = 0; i < countChekedOptions; i++) {
+					parms.push( $(calcOptions[i]).data());
+				}
+				
+			}
+
+			
+			
+
+
 		$.ajax({
         	type: "GET",
         	url:  ajax_object.ajaxurl,
@@ -129,7 +150,8 @@ jQuery(function ($) {
             	action : 'get_price',
             	distance : lengthval,
             	weight : inputMass.val(),
-            	volume : inputSize.val()
+            	volume : inputSize.val(),
+            	parms : JSON.stringify(parms)
         	},
         	success: function (response) {
         		var responseJSON = JSON.parse(response);
@@ -153,9 +175,28 @@ jQuery(function ($) {
 			}
 		}
 
-		function tonnaToMcub(tonna){ return parseFloat((tonna * 1000) * 0.00666667).toFixed(2);}
+		function tonnaToMcub(tonna){ return parseFloat((tonna * 1000) * getCoef(tonna)).toFixed(2);}
 
-		function mcubTotonna(mCub){ return parseFloat((mCub / 0.0066665) / 1000).toFixed(2); }
+		function mcubTotonna(mCub){ return parseFloat((mCub / getCoef(mCub)) / 1000).toFixed(2); }
+
+		function getCoef(tonna)
+		{
+			if(tonna < 1.5) return 6.666666667 / 1000;
+			if(tonna > 1.5 & tonna < 3.5) return 0.175 / 1000;
+			if(tonna > 3.5 & tonna < 9,5) return 0.1 / 1000;
+			if(tonna > 9.5 & tonna < 20) return 0.175 / 1000;
+			if(tonna > 20) return 0.042682927 / 1000;
+
+		}
+	   function getCoef2(tonna)
+		{
+			if(tonna < 1.5) return 6.666666667 / 1000;
+			if(tonna > 1.5 & tonna < 3.5) return 0.175 / 1000;
+			if(tonna > 3.5 & tonna < 9,5) return 0.1 / 1000;
+			if(tonna > 9.5 & tonna < 20) return 0.175 / 1000;
+			if(tonna > 20) return 0.042682927 / 1000;
+
+		}
 
 	});
 

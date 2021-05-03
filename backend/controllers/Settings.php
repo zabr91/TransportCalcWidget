@@ -1,5 +1,5 @@
 <?php
-//namespace TransportCalcWidget;
+namespace TransportCalc;
 
 /**
  * Настройки плагина
@@ -29,11 +29,11 @@ class Settings
 			$hook = add_menu_page( 'Настройки плагина TransportCalc', 'TransportCalc', 'manage_options', 'page-slug', 
 				[&$this, 'wiev'], 'dashicons-products', 100 );
 
-			if(isset($_GET)) {
-				if(!$_GET['action']) {
+			/*if(isset($_GET['action'])) {
+				if(!$_GET['action']) {*/
 					add_action( "load-$hook", [&$this, 'page_load'] );
-				}
-		    }
+			/*	}
+		    }*/
 			
 		} );
 

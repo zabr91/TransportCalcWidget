@@ -1,7 +1,10 @@
 <?php
 
-//namespace TransportCalcWidget;
+namespace TransportCalc;
 
+use WP_List_Table;
+
+//include TCW_PLUGIN_DIR.'base/abstract/BaseCustomData.php';
 
 class TablePrice extends WP_List_Table {
 
@@ -27,9 +30,7 @@ class TablePrice extends WP_List_Table {
 	}
 
 	// создает элементы таблицы
-	function prepare_items(){
-
-		
+	function prepare_items(){		
 
 		$price = new BaseCustomData('tc_price');
 		$this->items = $price->get_all();
@@ -55,10 +56,11 @@ class TablePrice extends WP_List_Table {
 	function get_columns(){
 		return array(
 			'cb'            => '<input type="checkbox" />',
-			'actions' => '',
+			'actions'       =>   'Функции',
 			'id'            => 'ID',
 			'title' 		=> 'Title',
 			'description'   => 'Description',
+			'distance'   	=> 'Distance',
 			'weight'   		=> 'Weight',
 			'volume'  		=> 'Volume',
 			'price'  		=> 'Price',
@@ -107,7 +109,7 @@ class TablePrice extends WP_List_Table {
 			$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id, __('edit','hb-users') );
 			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=delete&id='.$item->id, __('delete','hb-users') );
 
-			return esc_html( $item->name ) . $this->row_actions( $actions );
+			return ( isset( $item->name ) ? esc_html( $item->name ) : " " ). $this->row_actions( $actions );
 		}
 		else {
 			return isset($item->$colname) ? $item->$colname : print_r($item, 1);

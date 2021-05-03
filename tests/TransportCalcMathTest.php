@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use Transport_Calc\TransportCalcMath;
+use TransportCalc\TransportCalcMath;
 
 final class TransportCalcMathTest extends TestCase
 {

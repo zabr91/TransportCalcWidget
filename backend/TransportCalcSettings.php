@@ -1,5 +1,5 @@
 <?php
-namespace Transport_Calc;
+namespace TransportCalc;
 
 $TransportCalctings = new TransportCalcSettings();
 

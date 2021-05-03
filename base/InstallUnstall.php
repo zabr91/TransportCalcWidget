@@ -21,7 +21,7 @@ class TransportCalcInstallUnstall
 	{
 	  global $wpdb;
 		 $table_name = $wpdb->prefix . 'tc_price';
-		 $sql = "CREATE TABLE $table_name ( `id` INT NOT NULL AUTO_INCREMENT , `title` VARCHAR(100) NOT NULL , `description` TINYTEXT NOT NULL , `weight` FLOAT  NOT NULL , `volume` FLOAT NOT NULL , `price` DECIMAL NOT NULL , `msg` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
+		 $sql = "CREATE TABLE $table_name ( `id` INT NOT NULL AUTO_INCREMENT , `title` VARCHAR(100) NOT NULL , `description` TINYTEXT NOT NULL , `weight` FLOAT  NOT NULL , `distanse` INT  NOT NULL , `volume` FLOAT NOT NULL , `price` DECIMAL NOT NULL , `msg` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 		 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		 dbDelta( $sql );
 

@@ -1,5 +1,5 @@
 <?
-namespace Transport_Calc;
+namespace TransportCalc;
 
 use Elementor\Repeater;
 use Elementor\Widget_Base;
@@ -216,8 +216,9 @@ class Transport_calc_widget extends Widget_Base {
      	'<div class="calculate-from-data flex">'.
 		'<div class="calculate-from-data-one flex">'.
 		self::htmlbuilder_input_number('size', 'size', 1, 'Объем, м3',     '[0-9]+([\.,][0-9]+)?').
-		self::htmlbuilder_input_number('mass', 'mass', 0.15, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
+		self::htmlbuilder_input_number('mass', 'mass', 0.5, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
 		'</div><div class="calculate-from-data-two flex">'.
+		self::htmlbuilder_switch().
 		self::htmlbuilder_button().
 
 	'<div class="calculate-from-data-two__text calculate-center flex">Полный расчет стоимости переезда происходит во время погрузки</div>
@@ -228,6 +229,19 @@ class Transport_calc_widget extends Widget_Base {
 '</div></form>'.
 	 $this->detalis() . self::htmlbuilder_popupform();		
 	}	
+		
+
+		
+
+	public static function htmlbuilder_switch(){
+		return '<div class="flex">Наличныe <label class="switch">
+  
+  <input type="checkbox" checked>
+  <span class="slider round"></span>
+  
+</label>Безналичные</div>';
+	}
+
 
 	public static function htmlbuilder_map($class = 'calculate-map' , $id = 'map'){
 		return '<div class="'.$class.'"><div id="'.$id.'"></div></div>';
@@ -242,7 +256,7 @@ class Transport_calc_widget extends Widget_Base {
 	public static function htmlbuilder_input_number($class, $id, $placeholder, $label,  $pattern){
 		return '	<div class="calculate-from-data-one__size flex">
 		<label for="size">'.$label.'</label>
-		<input type="number" id="'.$id.'" name="'.$id.'" pattern="'.$pattern.'" min="0" placeholder="'.$placeholder.'">
+		<input type="number" id="'.$id.'" name="'.$id.'" pattern="'.$pattern.'" min="'.$placeholder.'" placeholder="'.$placeholder.'">
 	</div>';
 	}
 
@@ -328,7 +342,7 @@ class Transport_calc_widget extends Widget_Base {
 			for ($i = 0; $i < 3 ; $i++) { 
 				if($block['item_switcher'.$i] === 'yes'){
 		$html .=
-  '<input id="check1" type="checkbox" class="oversized" name="option'.$i.'" value="'.$block['value'.$i].'" 
+  '<input type="checkbox" class="oversized calc-options" name="option'.$i.'" value="'.$block['value'.$i].'" 
   data-persent="'.$block['present'.$i].'" >
   <label for="check1">'.$block['name'.$i].'</label><br />';		
 				}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Transport_Calc;
+namespace TransportCalc;
 
 use Elementor\Plugin;
 
@@ -59,6 +59,10 @@ class PluginTransportCalc {
 		wp_register_style( 'elementor-transport-calc',  TCW_PLUGIN_URL.'frontend/assets/css/style.css'  );
 		
     wp_enqueue_style( 'elementor-transport-calc' );
+
+    wp_register_style( 'elementor-transport-calc-swh',  TCW_PLUGIN_URL.'frontend/assets/css/switch.css'  );
+    
+    wp_enqueue_style( 'elementor-transport-calc-swh' );
   }
  
   /**
@@ -112,13 +116,19 @@ class PluginTransportCalc {
   }
 
   public function ajax_get_price() {
-    $distance = (float)$_REQUEST['distance'];
-    $weight = (float)$_REQUEST['weight'];
-    $volume = (float)$_REQUEST['volume'];
+
+    $distance = isset($_REQUEST['distance']) ? (float)$_REQUEST['distance'] : 0;
+    $weight =   isset($_REQUEST['weight']) ? (float)$_REQUEST['weight'] : 0;
+    $volume =   isset($_REQUEST['weight']) ? (float)$_REQUEST['volume'] : 0;
+    $parms =    json_decode( $_REQUEST['parms'] );
+
+    //Math::calculate(0, 0, 0);
+
+    //TransportCalcMath::
     
     $result = [
       'status' => 'OK',
-      'result' => TransportCalcMath::calculate($distance, $weight, $volume),
+      'result' => TransportCalcMath::calculate($distance, $weight, $volume, $parms),
     ];
 
     echo json_encode( $result );
