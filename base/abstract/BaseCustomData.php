@@ -121,7 +121,7 @@ class BaseCustomData
 
         if(!empty($orderBy))
         {
-            $sql .= ' ORDER BY ' . $orderBy;
+            $sql .= ' ORDER BY ' . $orderBy . ' ';
         }
 
         $result = $wpdb->get_results($sql);

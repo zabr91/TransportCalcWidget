@@ -119,16 +119,24 @@ class PluginTransportCalc {
 
     $distance = isset($_REQUEST['distance']) ? (float)$_REQUEST['distance'] : 0;
     $weight =   isset($_REQUEST['weight']) ? (float)$_REQUEST['weight'] : 0;
-    $volume =   isset($_REQUEST['weight']) ? (float)$_REQUEST['volume'] : 0;
-    $parms =    json_decode( $_REQUEST['parms'] );
+    $volume =   isset($_REQUEST['volume']) ? (float)$_REQUEST['volume'] : 0;
+    $options =  $_REQUEST['options'];
+
+    $options = preg_replace("/[\r\n]+/", " ", $options);
+    $options = utf8_encode($options);
+    $options = stripslashes(trim($options,'"'));
+    $options = json_decode($options, true);
+
+    //preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $_REQUEST['options'])
 
     //Math::calculate(0, 0, 0);
 
     //TransportCalcMath::
     
     $result = [
-      'status' => 'OK',
-      'result' => TransportCalcMath::calculate($distance, $weight, $volume, $parms),
+      'status' => 'OK', // $distance = 0, $weight = 0, $volume = 0, $parms = null
+      'result' => TransportCalcMath::calculate($distance, $weight, $volume, $options),
+   //  'options' =>  $options[0]["persent"] 
     ];
 
     echo json_encode( $result );

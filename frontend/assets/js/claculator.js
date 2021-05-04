@@ -24,6 +24,13 @@ jQuery(function ($) {
         var modalWindow = $('#transport_calc_popup');
         var submitBtn = $('#send-calc-result');
         var closeWindow = $('#close-modal');
+        var calcOptions = $(".calc-options");
+
+        calcOptions.on("click", function(e){
+        console.log("add options"); 
+		calculateDistancePrice(0);
+		});
+
 
         submitBtn.on("click", function(e){ 
 		e.preventDefault();
@@ -127,21 +134,18 @@ jQuery(function ($) {
 
 		function calculateDistancePrice(distance) {
 
-			var calcOptions = $(".calc-options:checked");
-			var countChekedOptions = calcOptions.length;
+			var calcOptionsChk = $(".calc-options:checked");
+			var countChekedOptions = calcOptionsChk.length;
 
-			var parms = [];
+			var options = [];
 
 			if(countChekedOptions > 0) {
 				for (var i = 0; i < countChekedOptions; i++) {
-					parms.push( $(calcOptions[i]).data());
+					options.push( $(calcOptionsChk[i]).data());
 				}
 				
 			}
-
-			
-			
-
+			console.log(options);
 
 		$.ajax({
         	type: "GET",
@@ -149,14 +153,14 @@ jQuery(function ($) {
         	data: {
             	action : 'get_price',
             	distance : lengthval,
-            	weight : inputMass.val(),
-            	volume : inputSize.val(),
-            	parms : JSON.stringify(parms)
+            	weight : inputSize.val(),
+            	volume : inputMass.val(),
+            	options : JSON.stringify(options)
         	},
         	success: function (response) {
         		var responseJSON = JSON.parse(response);
-        		$('#calc-price').html(responseJSON.result);
-            	console.log('AJAX response : ',responseJSON.result );
+        		$('#calc-price').html(responseJSON.result.price);
+            	console.log('AJAX response : ',response );
         	}
     	});
 
@@ -175,27 +179,24 @@ jQuery(function ($) {
 			}
 		}
 
-		function tonnaToMcub(tonna){ return parseFloat((tonna * 1000) * getCoef(tonna)).toFixed(2);}
+		var tableConf = [
+		 [1.5,  10],
+		 [3.5,  20],
+ 		 [5.5,  35],
+		 [9.5,	50],
+		 [20,	82]
+		];
 
-		function mcubTotonna(mCub){ return parseFloat((mCub / getCoef(mCub)) / 1000).toFixed(2); }
-
-		function getCoef(tonna)
-		{
-			if(tonna < 1.5) return 6.666666667 / 1000;
-			if(tonna > 1.5 & tonna < 3.5) return 0.175 / 1000;
-			if(tonna > 3.5 & tonna < 9,5) return 0.1 / 1000;
-			if(tonna > 9.5 & tonna < 20) return 0.175 / 1000;
-			if(tonna > 20) return 0.042682927 / 1000;
-
+		function tonnaToMcub(tonna){
+			for (var i = 0; i < tableConf.length; i++) {
+				if(tonna <= tableConf[i][1]) return tableConf[i][0];
+			}
 		}
-	   function getCoef2(tonna)
-		{
-			if(tonna < 1.5) return 6.666666667 / 1000;
-			if(tonna > 1.5 & tonna < 3.5) return 0.175 / 1000;
-			if(tonna > 3.5 & tonna < 9,5) return 0.1 / 1000;
-			if(tonna > 9.5 & tonna < 20) return 0.175 / 1000;
-			if(tonna > 20) return 0.042682927 / 1000;
 
+		function mcubTotonna(mCub){
+			for (var i = 0; i < tableConf.length; i++) {
+				if(mCub <= tableConf[i][0]) return tableConf[i][1];
+			}			
 		}
 
 	});

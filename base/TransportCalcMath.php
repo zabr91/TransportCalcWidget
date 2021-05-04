@@ -7,32 +7,45 @@ class TransportCalcMath
 	//private $cars;;
     private static $car;
 
-    public static function calculate($distance = 0, $weight = 0, $volume = 0, $parms = null)  {
+    public static function calculate($distance = 0, $weight = 0, $volume = 0, $options = null)  {
 
        $price = 0;
+
+       $distance = round($distance);
 
        $currentCar = new BaseCustomData("tc_price");
        $conditionValue = [
         'distance' => $distance,
-        'weight' => $weight,
-        'volume' => $volume
+        'volume' => $volume,
+        'weight' => $weight
        ];
-       $car = $currentCar->get_by($conditionValue, '>', 'distance');
+       $car = $currentCar->get_by($conditionValue, '>=', 'price');
 
       
-       $priceCalc = $distance * $car[0]->price;
+       $priceCalc = round($distance * $car[0]->price);
 
-       if($weight > 90) {
+       /*if($weight > 90) {
         $priceCalc = $priceCalc * 2;
+       }*/
+
+       $optionsSum = 0;
+
+       foreach ($options as $value) {
+         if( array_key_exists ( 'persent' , $value )) {
+
+          $optionsSum += $priceCalc * ($value["persent"] / 100); //Calc * ($value / 100);
+         }
+       
+        if( array_key_exists ( 'min_price' , $value )) {
+
+          $optionsSum += $value["min_price"];
+         }
        }
+       //$step = $options[0]["persent"] ;
 
-
-       foreach ($parms as $parm) {
-         # code...
-       }
-
-       $price = ["price" =>$distance * $car[0]->price,
-       'msg' => $car[0]->msg];
+       $price = ["price" => $priceCalc + $optionsSum,
+       'message' => $optionsSum
+           ];
 
        return $price;
 

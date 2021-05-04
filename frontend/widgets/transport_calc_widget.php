@@ -316,6 +316,11 @@ class Transport_calc_widget extends Widget_Base {
 		return $html;
 	}
 
+	public static function parmsBuilder($block, $i){
+		return ' data-persent= "'.	(isset($block['present' .$i])   ? $block['present'.$i] : '0').'" '.
+        	   ' data-minprice= "'. (isset($block['min_price'.$i]) ? $block['min_price'.$i] : '0').'" ';
+	}
+
 	public static function htmlbuilder_block_radio_list($block)
 	{
 		$html = '<div class="calculate-from-detailed-block-list-item">
@@ -324,7 +329,8 @@ class Transport_calc_widget extends Widget_Base {
 		
 		for ($i = 0; $i < 3 ; $i++) { 
 		if($block['item_switcher'.$i] === 'yes')	
-		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="'.$block['value'.$i].'">
+		$html .='<input type="radio" id="check1" name="loding" class="oversized" value="'.$block['value'.$i].'" '.
+	self::parmsBuilder($block, $i).'>
 					<label for="check1">'.$block['name'.$i].'</label>';
 
 		//if($block['tooltip'.$i] === 'yes')
@@ -342,8 +348,8 @@ class Transport_calc_widget extends Widget_Base {
 			for ($i = 0; $i < 3 ; $i++) { 
 				if($block['item_switcher'.$i] === 'yes'){
 		$html .=
-  '<input type="checkbox" class="oversized calc-options" name="option'.$i.'" value="'.$block['value'.$i].'" 
-  data-persent="'.$block['present'.$i].'" >
+  '<input type="checkbox" class="oversized calc-options" name="option'.$i.'" value="'.$block['value'.$i].'" '.
+  self::parmsBuilder($block, $i).' >
   <label for="check1">'.$block['name'.$i].'</label><br />';		
 				}
 			}
