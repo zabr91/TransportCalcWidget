@@ -12,6 +12,8 @@ class Settings
 		$this->delete();
 
 		$this->save();
+
+
 		
 
 		// WP 5.4.2. Cохранение опции экрана per_page. Нужно вызывать до события 'admin_menu'
@@ -25,9 +27,9 @@ class Settings
 		}, 10, 3 );
 
 		// создаем страницу в меню, куда выводим таблицу
-		add_action( 'admin_menu', function(){
-			$hook = add_menu_page( 'Настройки плагина TransportCalc', 'TransportCalc', 'manage_options', 'page-slug', 
-				[&$this, 'wiev'], 'dashicons-products', 100 );
+		add_action( 'admin_menu', function(){//page-slug
+			$hook = add_menu_page( 'Настройки плагина TransportCalc', 'TransportCalc', 'manage_options', 'transportcalc-settings', 
+				[&$this, 'wiev'], 'dashicons-calculator', 100 );
 
 			/*if(isset($_GET['action'])) {
 				if(!$_GET['action']) {*/
@@ -42,7 +44,7 @@ class Settings
 
 	function page_load(){
 	
-		require_once TCW_PLUGIN_DIR . 'base/TablePrice.php'; // тут находится класс Example_List_Table...
+		require_once TCW_PLUGIN_DIR . 'backend/controllers/TablePrice.php'; // тут находится класс Example_List_Table...
 	
 		$GLOBALS['Example_List_Table'] = new TablePrice();// создаем экземпляр и сохраним его дальше выведем
 
@@ -107,6 +109,8 @@ class Settings
 	add_settings_section( 'section_id', 'Основные настройки', '', 'TransportCalc' ); 
 
 	add_settings_field('yandex_api', 'Яндекс API', [&$this, 'fill_yandex_api'], 'TransportCalc', 'section_id' );
+
+	add_settings_field('email', 'email менеджера', [&$this, 'fill_email'],       'TransportCalc', 'section_id' );
    }
 
    function fill_yandex_api(){
@@ -114,6 +118,14 @@ class Settings
 	$val = $val ? $val['yandex_api'] : null;
 		?>
 		<input type="text" name="TransportCalc[yandex_api]" value="<?php echo esc_attr( $val ) ?>" />
+		<?php
+	}
+
+	function fill_email(){
+	$val = get_option('TransportCalc');
+	$val = isset($val['email']) ? $val['email'] : null;
+		?>
+		<input type="text" name="TransportCalc[email]" value="<?php echo esc_attr( $val ) ?>" />
 		<?php
 	}
 

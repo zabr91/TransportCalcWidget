@@ -50,19 +50,22 @@ class PluginTransportCalc {
   public function widget_scripts() {
     wp_enqueue_script( 'ymaps', 'https://api-maps.yandex.ru/2.1/?apikey='.self::$yandex_maps_api.'&lang=ru_RU', null, false, true );
     
-    wp_register_script( 'elementor-transport-calc', TCW_PLUGIN_URL.'frontend/assets/js/claculator.js', [ 'jquery', 'ymaps' ], false, true );
+    wp_enqueue_script( 'elementor-transport-jconfirm', TCW_PLUGIN_URL.'frontend/assets/dist/jquery-confirm/jquery-confirm.min.js', ['jquery'], false, true );
+
+    wp_register_script( 'elementor-transport-calc', TCW_PLUGIN_URL.'frontend/assets/js/claculator.js', [ 'jquery', 'ymaps', 'elementor-transport-jconfirm' ], false, true );
 
     wp_enqueue_script( 'elementor-transport-calc' );
 
     wp_localize_script( 'elementor-transport-calc', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		
 		wp_register_style( 'elementor-transport-calc',  TCW_PLUGIN_URL.'frontend/assets/css/style.css'  );
-		
-    wp_enqueue_style( 'elementor-transport-calc' );
+		wp_enqueue_style( 'elementor-transport-calc' );
 
     wp_register_style( 'elementor-transport-calc-swh',  TCW_PLUGIN_URL.'frontend/assets/css/switch.css'  );
-    
     wp_enqueue_style( 'elementor-transport-calc-swh' );
+
+    wp_register_style( 'elementor-transport-calc-jconfirm',  TCW_PLUGIN_URL.'frontend/assets/dist/jquery-confirm/jquery-confirm.min.css'  );
+    wp_enqueue_style( 'elementor-transport-calc-jconfirm' );
   }
  
   /**
@@ -144,6 +147,38 @@ class PluginTransportCalc {
     wp_die();
   }
 
+  public function ajax_send_data() {
+
+    $data =[
+    'name' =>  strip_tags($_REQUEST['name']),
+    'phone' =>  strip_tags($_REQUEST['phone']),
+    'email' =>  strip_tags($_REQUEST['email'])
+    ];
+    
+   $formTo = get_option('TransportCalc')['yandex_api'];
+
+    if(isset($formTo)) {
+
+    $formSubject = "Новое сообщение с сайта";
+    $formMessage = 
+    "<p>Имя ".$data['name']."</p>".
+    "<p>Телефон ".$data['phone']."</p>".
+    "<p>email ".$data['email']."</p>";
+
+    
+    wp_mail( $formTo, $formSubject, $formMessage );
+    }
+
+   $messages = new BaseCustomData('tc_messages');
+   $messages->insert($data);
+   unset($messages);
+
+   echo "OK";
+   
+
+    wp_die();
+  }
+
   /**
    *  Plugin class constructor
    *
@@ -168,6 +203,10 @@ class PluginTransportCalc {
     add_action( 'wp_ajax_get_price',        [ $this, 'ajax_get_price'] );
     
     add_action( 'wp_ajax_nopriv_get_price', [ $this, 'ajax_get_price'] );
+
+    add_action( 'wp_ajax_send_data',        [ $this, 'ajax_send_data'] );
+    
+    add_action( 'wp_ajax_nopriv_send_data', [ $this, 'ajax_send_data'] );
 
     }
 }

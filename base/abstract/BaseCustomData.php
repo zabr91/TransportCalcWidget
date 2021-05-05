@@ -80,7 +80,7 @@ class BaseCustomData
      *
      * @return Table result
      */
-    public function get_by(array $conditionValue, $condition = '=', $orderBy = NULL)
+    public function get_by(array $conditionValue, $condition = '=', $orderBy = NULL, $limit = null)
     {
         global $wpdb;
 
@@ -123,6 +123,12 @@ class BaseCustomData
         {
             $sql .= ' ORDER BY ' . $orderBy . ' ';
         }
+
+        if(!empty($limit))
+        {
+            $sql .= ' LIMIT ' . $limit . ' ';
+        }
+
 
         $result = $wpdb->get_results($sql);
 

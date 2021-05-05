@@ -18,23 +18,69 @@ jQuery(function ($) {
 		var inputFrom =  $('.calculate-from-position__from input');
         var inputTo = $('.calculate-from-position__to input');
         var distance = $('#distance');
-        var inputSize = $('input#size');
-        var inputMass = $('input#mass');
+        var inputVolume = $('input#size');
+        var inputWeight = $('input#mass');
 
         var modalWindow = $('#transport_calc_popup');
-        var submitBtn = $('#send-calc-result');
+        var sendBtn = $('#send-calc-result');
         var closeWindow = $('#close-modal');
         var calcOptions = $(".calc-options");
+        var sendForm = $('#sendForm');
+        var openDialog = false;
+
+        var htmlForm = 
+   			'<form class="tcw-form">'+
+   			   '<div>'+
+   			   	'<label>Имя</label>'+
+   			   	'<input type="text" size="40"  value="" name="name" class="name" placeholder="Имя"/>'+
+   			   '</div>'+
+			   '<div>'+
+			   	'<label>Телефон</label>'+
+			   	 '<input type="tel" size="40"  value="" name="phone" class="phone"  placeholder="+7(__)__-__-__" />'+
+			   '</div>'+
+			   '<div>'+
+			   	'<label>e-mail</label>'+
+			   	'<input type="email" size="40" value="" name="email" class="email" placeholder="Почта"/>'+
+			   '</div>'+	
+			   ' <div class="flex">Наличныe <label class="switch"><input type="checkbox" class="apcept"><span class="slider round"></span></label>Безналичные</div>'+		   
+			   	'<label><input type="checkbox"/> Заполняя форму обратной связи я даю согласие на обработку своих персональных данных</label>'+
+			  '<form>';
+
+        sendForm.on("click", function(e){
+
+        });
 
         calcOptions.on("click", function(e){
-        console.log("add options"); 
+        
 		calculateDistancePrice(0);
 		});
 
 
-        submitBtn.on("click", function(e){ 
+        sendBtn.on("click", function(e){ 
 		e.preventDefault();
-		modalWindow.fadeIn(300);
+		//if(openDialog == false){
+            	
+            	$.alert({
+    				title: 'Подать заявку',
+    				theme: 'supervan',
+    				content: htmlForm,
+    				buttons: {
+                 formSubmit: {
+                  text: 'Отпавить',
+                  btnClass: 'btn-blue',
+                 action: function () {
+                 	var name = this.$content.find('.apcept').val();
+                 	var name = this.$content.find('.name').val();
+                 	var phone = this.$content.find('.phone').val();
+                 	var email = this.$content.find('.email').val();
+					sendData(name, phone, email);
+
+					},
+				 cancel: function () {
+            		//close
+        		},
+			}}});
+                
 		});
 
 		closeWindow.on("click", function(e){ 
@@ -63,27 +109,27 @@ jQuery(function ($) {
 			inputFrom.on('change', function(){ routeInit();});
 			inputTo.on  ('change', function(){ routeInit();});
 
-			inputSize.bind("keyup change wheel", function(){
+			inputVolume.bind("keyup change wheel", function(){
 			  var c1, c2, b1, b2;
 
-			  /* if(inputMass.val() < 0.5) {
-			   	inputMass.value = 0.5;
+			  /* if(inputWeight.val() < 0.5) {
+			   	inputWeight.value = 0.5;
 			   }*/
 
-			   c1 = inputSize.val();
-			   c2 = inputMass.val();
+			   c1 = inputVolume.val();
+			   c2 = inputWeight.val();
 
 			   b1 = tonnaToMcub(c2);
 			   b2 = mcubTotonna(c1);
 
-			   inputMass.val(b2);
+			   inputWeight.val(b2);
 			   calculateDistancePrice(lengthval);
 			});
 
-		    inputMass.bind("keyup change wheel", function(){
+		    inputWeight.bind("keyup change wheel", function(){
 			var val = $(this).val();
 
-				inputSize.val(tonnaToMcub(val)); 
+				inputVolume.val(tonnaToMcub(val)); 
 
 				calculateDistancePrice(lengthval);
 		   });
@@ -133,6 +179,56 @@ jQuery(function ($) {
 		};
 
 		function calculateDistancePrice(distance) {
+		if(openDialog == false){
+		$.ajax({
+        	type: "GET",
+        	url:  ajax_object.ajaxurl,
+        	data: {
+            	action : 'get_price',
+            	distance : lengthval,
+            	weight : inputWeight.val(),
+            	volume : inputVolume.val(),
+            	options : getSelectOptions()
+        	},
+        	success: function (response) {
+        		var responseJSON = JSON.parse(response);
+        		$('#calc-price').html(responseJSON.result.price);
+            	console.log('AJAX response : ',response );
+
+
+            	if(responseJSON.result.message) {
+            		openDialog = true;
+            	$.alert({
+    				title: responseJSON.result.message,
+    				theme: 'supervan',
+    				content: htmlForm
+				});
+                }
+        	}
+    	});
+	 }
+
+		};
+		function sendData(name, phone, email) {
+			$.ajax({
+        	type: "GET",
+        	url:  ajax_object.ajaxurl,
+        	data: {
+        		action: 'send_data',
+        		name : name,
+        		phone: phone,
+        		email : email,
+        		pointa: 0,
+        		pointb: 0,
+        		options: getSelectOptions()
+        	},
+        	success: function (response) {
+        		console.log(response);
+        	}
+        	});
+		}
+
+		function getSelectOptions(){
 
 			var calcOptionsChk = $(".calc-options:checked");
 			var countChekedOptions = calcOptionsChk.length;
@@ -145,26 +241,10 @@ jQuery(function ($) {
 				}
 				
 			}
-			console.log(options);
 
-		$.ajax({
-        	type: "GET",
-        	url:  ajax_object.ajaxurl,
-        	data: {
-            	action : 'get_price',
-            	distance : lengthval,
-            	weight : inputSize.val(),
-            	volume : inputMass.val(),
-            	options : JSON.stringify(options)
-        	},
-        	success: function (response) {
-        		var responseJSON = JSON.parse(response);
-        		$('#calc-price').html(responseJSON.result.price);
-            	console.log('AJAX response : ',response );
-        	}
-    	});
+			return JSON.stringify(options);
 
-		};
+		}
 
 		function mask(element, condition) {
 			var preloader = '<div class="preloader-holder"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>';
@@ -189,13 +269,13 @@ jQuery(function ($) {
 
 		function tonnaToMcub(tonna){
 			for (var i = 0; i < tableConf.length; i++) {
-				if(tonna <= tableConf[i][1]) return tableConf[i][0];
+				if(tonna <= tableConf[i][0]) return tableConf[i][1];
 			}
 		}
 
 		function mcubTotonna(mCub){
 			for (var i = 0; i < tableConf.length; i++) {
-				if(mCub <= tableConf[i][0]) return tableConf[i][1];
+				if(mCub <= tableConf[i][1]) return tableConf[i][0];
 			}			
 		}
 

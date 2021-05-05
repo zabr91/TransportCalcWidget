@@ -34,15 +34,6 @@ class Transport_calc_widget extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'Yandex_api',
-			[
-				'label' => __( 'Yandex api', self::$slug ),
-				'type' => \Elementor\Controls_Manager::TEXT,
-				'default' => __( 'Default title', self::$slug ),
-				'placeholder' => __( 'Type your title here', self::$slug ),
-			]
-		);
 		/*Repeater main*/
 		$repeater = new \Elementor\Repeater();
 
@@ -204,6 +195,7 @@ class Transport_calc_widget extends Widget_Base {
 
 		$this->end_controls_section();		
 }
+
 	protected function render() {
 	echo '<div class="calculate-wrap-form">'.self::htmlbuilder_map().
 	'<form action="#" class="calculate-from">
@@ -218,7 +210,7 @@ class Transport_calc_widget extends Widget_Base {
 		self::htmlbuilder_input_number('size', 'size', 1, 'Объем, м3',     '[0-9]+([\.,][0-9]+)?').
 		self::htmlbuilder_input_number('mass', 'mass', 0.5, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
 		'</div><div class="calculate-from-data-two flex">'.
-		self::htmlbuilder_switch().
+	//	self::htmlbuilder_switch().
 		self::htmlbuilder_button().
 
 	'<div class="calculate-from-data-two__text calculate-center flex">Полный расчет стоимости переезда происходит во время погрузки</div>
@@ -227,7 +219,7 @@ class Transport_calc_widget extends Widget_Base {
 
 	</div>'.
 '</div></form>'.
-	 $this->detalis() . self::htmlbuilder_popupform();		
+	 $this->detalis(); //self::htmlbuilder_popupform();		
 	}	
 		
 
@@ -272,12 +264,15 @@ class Transport_calc_widget extends Widget_Base {
 
 	
 	public static function htmlbuilder_button(){
-		return '<div class="calculate-from-data-two-button">
-		<button class="big-button calculate-center" id="send-calc-result">
+		$html = '
+	 
+		<div class="calculate-from-data-two-button">
+	<button class="big-button calculate-center" id="send-calc-result">
 			<div class="button-price"><span id="calc-price">0</span> <span>₽ </span></div>
 			Отправить заявку
-		</button>
-	</div>';
+	</button>
+</div>';
+		return $html;
 	}
 
 	public static function htmlbuilder_calculate_from_detailed_block($block, $count_colums ){
@@ -362,26 +357,32 @@ class Transport_calc_widget extends Widget_Base {
 
 		public static function htmlbuilder_popupform() {
 			$html = '<div id="transport_calc_popup" class="modal">
-  						<div class="modal-content">
-    						<span id="close-modal">&times;</span>
-   							<div class="popup__from">
-    <span class="wpcf7-form-control-wrap you-name"><input type="text" name="you-name" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required popup__name" aria-required="true" aria-invalid="false" placeholder="Имя"></span><br>
-    <span class="wpcf7-form-control-wrap your-tel"><input type="tel" name="your-tel" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel popup__tel" aria-required="true" aria-invalid="false" placeholder="+7(__)__-__-__"></span><br>
-    <span class="wpcf7-form-control-wrap your-mail"><input type="email" name="your-mail" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-email popup__email" aria-invalid="false" placeholder="Почта"></span><br>
-    <input type="submit" value="Отправить заявку" class="wpcf7-form-control wpcf7-submit" disabled=""><span class="ajax-loader"></span><p></p>
-<input type="hidden" name="result" value="" class="wpcf7-form-control wpcf7-hidden" id="calcresult">
-<div class="popup-check">
-    <span class="wpcf7-form-control-wrap acceptance-761"><span class="wpcf7-form-control wpcf7-acceptance"><span class="wpcf7-list-item"><input type="checkbox" name="acceptance-761" value="1" aria-invalid="false"></span></span></span><br>
-        <span><br>
-            Заполняя форму обратной связи на сайте www.kangor.ru,<br>
-            я даю согласие на обработку своих персональных данных<br>
-        </span>
-    </div>
-</div>
-  						</div>
-					</div>';
-
-
+  	<div class="modal-content">
+    	<span id="close-modal">&times;</span>
+   		<div class="popup__from">
+   		<h4 class="text-center">Отправить заявку</h4>
+   			<form class="tcw-form">
+   			   <div>
+   			   	<label>Имя</label>
+   			   	<input type="text" size="40"  value="" name="name"/>
+   			   </div>
+			   <div>
+			   	<label>Телефон</label>
+			   	 <input type="tel" size="40"  value="" name="phone"  placeholder="+7(__)__-__-__" />
+			   </div>
+			   <div>
+			   	<label>e-mail</label>
+			   	<input type="email" size="40" value="" name="email" placeholder="Почта"/>
+			   </div>
+			   
+			   	<label><input type="checkbox"/> Заполняя форму обратной связи на сайте '. get_site_url().'
+			   <br>я даю согласие на обработку своих персональных данных</label>
+			   
+   				<div><input type="submit" value="Отправить" id="sendForm" /></div>
+            <form>
+        </div>
+  	</div>
+</div>';
 			return $html;
 		}
 
@@ -404,7 +405,8 @@ class Transport_calc_widget extends Widget_Base {
 
 					}
 					
-		$html .='</div>';
+		$html .='</div>
+		</div>';
 
 		return $html;
 	}

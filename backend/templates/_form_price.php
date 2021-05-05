@@ -14,7 +14,7 @@
 </label></p>
 <p><label>
 	Distanse
-	<input type="text" name="distanse" value="<?= isset($values[0]->distanse) ? $values[0]->distanse : "" ?>">
+	<input type="text" name="distance" value="<?= isset($values[0]->distance) ? $values[0]->distance : "" ?>">
 </label></p>
 <p><label>
 	Weight

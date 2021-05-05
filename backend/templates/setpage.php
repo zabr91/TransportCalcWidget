@@ -9,9 +9,9 @@
 			?>
 		</form>
 
-
-	<a href="?page=<?= $_GET['page'] ?>&action=create"  class="btn">Создать</a>	
-
+    <h3>Таблица стоимости доставки груза</h3>
+	<a href="?page=<?= $_GET['page'] ?>&action=create"  class="btn">Создать новую стоимость</a>	
+	
 	<?php
 	// выводим таблицу на экран где нужно
 	echo '<form action="" method="POST">';

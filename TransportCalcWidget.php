@@ -7,7 +7,7 @@
  * Author URI:  https://pajtai.github.io/
  * Text Domain: 
  */
-namespace TransportCalcWidget;
+namespace TransportCalc;
 
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
@@ -19,10 +19,11 @@ define( 'TCW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'TCW_FILE',  __FILE__  );
 
 
-include TCW_PLUGIN_DIR.'base/abstract/BaseCustomData.php';
+include TCW_PLUGIN_DIR.'base/abstract/BaseCustomData.php';;
 // admin panel
 include_once TCW_PLUGIN_DIR.'backend/controllers/Settings.php';
-//include_once TCW_PLUGIN_DIR.'backend/TransportCalcSettings.php';
+include_once TCW_PLUGIN_DIR.'backend/controllers/Messages.php';
+
 include_once TCW_PLUGIN_DIR.'base/InstallUnstall.php';
 
 // Math operations
@@ -30,3 +31,9 @@ include_once TCW_PLUGIN_DIR.'base/TransportCalcMath.php';
 
 // front end
 include_once TCW_PLUGIN_DIR.'frontend/controllers/PluginTransportCalc.php';
+
+
+function get_frontend_template($template){
+	return include_once(TCW_PLUGIN_DIR. 'frontend/templates/'.$template.'.php');
+}
+

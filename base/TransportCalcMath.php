@@ -19,10 +19,10 @@ class TransportCalcMath
         'volume' => $volume,
         'weight' => $weight
        ];
-       $car = $currentCar->get_by($conditionValue, '>=', 'price');
+       $car = $currentCar->get_by($conditionValue, '>=', 'distance, price', 1);
 
       
-       $priceCalc = round($distance * $car[0]->price);
+       $priceCalc = $distance * $car[0]->price;
 
        /*if($weight > 90) {
         $priceCalc = $priceCalc * 2;
@@ -44,8 +44,10 @@ class TransportCalcMath
        //$step = $options[0]["persent"] ;
 
        $price = ["price" => $priceCalc + $optionsSum,
-       'message' => $optionsSum
+       'message' => $car[0]->msg
            ];
+
+        unset($currentCar);
 
        return $price;
 

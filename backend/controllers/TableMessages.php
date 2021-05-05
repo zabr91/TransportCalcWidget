@@ -4,9 +4,9 @@ namespace TransportCalc;
 
 use WP_List_Table;
 
-//include TCW_PLUGIN_DIR.'base/abstract/BaseCustomData.php';
 
-class TablePrice extends WP_List_Table {
+
+class TableMessages extends WP_List_Table {
 
 	function __construct(){
 		parent::__construct(array(
@@ -32,8 +32,9 @@ class TablePrice extends WP_List_Table {
 	// создает элементы таблицы
 	function prepare_items(){		
 
-		$price = new BaseCustomData('tc_price');
-		$this->items = $price->get_all();
+		$messages = new BaseCustomData('tc_messages');
+		$this->items = $messages->get_all();
+		unset($messages);
 
 				
 		//$items = new BaseCustomData('tc_price');
@@ -58,13 +59,16 @@ class TablePrice extends WP_List_Table {
 			'cb'            => '<input type="checkbox" />',
 			'actions'       =>   'Функции',
 			'id'            => 'ID',
-			'title' 		=> 'Title',
-			'description'   => 'Description',
+			'name' 	    	=> 'Имя',
+			'phone' 		=> 'Телефон',
+			'email' 		=> 'E-mail',
+			/*'pointa' 		=> 'С пункта А',
+			'pointb' 		=> 'В пункта B',
 			'distance'   	=> 'Distance',
 			'weight'   		=> 'Weight',
 			'volume'  		=> 'Volume',
 			'price'  		=> 'Price',
-			'msg'  			=> 'Message',
+			'options'  		=> 'Опиции',*/
 		);
 	}
 
@@ -106,7 +110,7 @@ class TablePrice extends WP_List_Table {
 
 			
 			$actions = array();
-			$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id, __('edit','hb-users') );
+			//$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id, __('edit','hb-users') );
 			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=delete&id='.$item->id, __('delete','hb-users') );
 
 			return ( isset( $item->name ) ? esc_html( $item->name ) : " " ). $this->row_actions( $actions );
