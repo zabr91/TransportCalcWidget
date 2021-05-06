@@ -210,6 +210,7 @@ class Transport_calc_widget extends Widget_Base {
 		self::htmlbuilder_input_number('size', 'size', 1, 'Объем, м3',     '[0-9]+([\.,][0-9]+)?').
 		self::htmlbuilder_input_number('mass', 'mass', 0.5, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
 		'</div><div class="calculate-from-data-two flex">'.
+		'<p id="passingcargo"></p>'.
 	//	self::htmlbuilder_switch().
 		self::htmlbuilder_button().
 

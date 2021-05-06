@@ -27,6 +27,7 @@ jQuery(function ($) {
         var calcOptions = $(".calc-options");
         var sendForm = $('#sendForm');
         var openDialog = false;
+        var price2 =$('#passingcargo');
 
         var htmlForm = 
    			'<form class="tcw-form">'+
@@ -46,9 +47,6 @@ jQuery(function ($) {
 			   	'<label><input type="checkbox"/> Заполняя форму обратной связи я даю согласие на обработку своих персональных данных</label>'+
 			  '<form>';
 
-        sendForm.on("click", function(e){
-
-        });
 
         calcOptions.on("click", function(e){
         
@@ -63,6 +61,7 @@ jQuery(function ($) {
             	$.alert({
     				title: 'Подать заявку',
     				theme: 'supervan',
+    				 closeIcon: true,
     				content: htmlForm,
     				buttons: {
                  formSubmit: {
@@ -193,15 +192,39 @@ jQuery(function ($) {
         	success: function (response) {
         		var responseJSON = JSON.parse(response);
         		$('#calc-price').html(responseJSON.result.price);
-            	console.log('AJAX response : ',response );
+        		$('#passingcargo').html('Если груз будет попутным '+responseJSON.result.passingcargo+' руб.');
+            	//console.log('AJAX response : ',responseJSON.result.passingcargo );
 
 
             	if(responseJSON.result.message) {
             		openDialog = true;
             	$.alert({
     				title: responseJSON.result.message,
+    				closeIcon: true,
     				theme: 'supervan',
-    				content: htmlForm
+    				content: htmlForm,
+
+    				buttons: {
+                 formSubmit: {
+                  text: 'Отпавить',
+                  btnClass: 'btn-blue',
+                 action: function () {
+                 	var name = this.$content.find('.apcept').val();
+                 	var name = this.$content.find('.name').val();
+                 	var phone = this.$content.find('.phone').val();
+                 	var email = this.$content.find('.email').val();
+					sendData(name, phone, email);
+
+					},
+				 cancel: function () {
+            		//close
+        			},
+        		}
+        		},
+
+
+
+
 				});
                 }
         	}

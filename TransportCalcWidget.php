@@ -5,7 +5,7 @@
  * Version:     1.1.0
  * Author:      Ivan Zabroda
  * Author URI:  https://pajtai.github.io/
- * Text Domain: 
+ * Text Domain: elementor-transport_calc_widget
  */
 namespace TransportCalc;
 

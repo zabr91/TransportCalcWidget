@@ -28,7 +28,7 @@ class TransportCalcInstallUnstall
 		 CREATE TABLE IF NOT EXISTS $table_price ( `id` INT NOT NULL AUTO_INCREMENT , `title` VARCHAR(100) NOT NULL , `description` TINYTEXT NOT NULL , `weight` FLOAT  NOT NULL , `distance` INT  NOT NULL , `volume` FLOAT NOT NULL , `price` DECIMAL NOT NULL , `msg` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS $table_messages ( `id` INT NULL , `send` TIMESTAMP NOT NULL , `name` VARCHAR(100) NOT NULL , `phone` VARCHAR(20) NOT NULL , `pointa` VARCHAR(100) NOT NULL , `pointb` VARCHAR(100) NOT NULL , `distance` INT NOT NULL , `volume` FLOAT NOT NULL , `weight` INT NOT NULL , `options` JSON NOT NULL , `email` VARCHAR(255) NOT NULL , `price` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS $table_messages ( `id` INT NULL , `send` TIMESTAMP NOT NULL , `name` VARCHAR(100) NOT NULL , `phone` VARCHAR(20) NOT NULL , `pointa` VARCHAR(100) NULL , `pointb` VARCHAR(100) NULL , `distance` INT NULL , `volume` FLOAT  NULL , `weight` INT NULL , `options` JSON NULL , `email` VARCHAR(255) NULL , `price` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
 		 ";

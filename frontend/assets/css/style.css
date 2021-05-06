@@ -564,13 +564,13 @@ button.tooltip-btn {
     margin-bottom: 1px;
     text-transform: uppercase;
     font-weight: bolder;
-    color: #484545;
+   
 }
 .tcw-form > div > input {
 border-radius: 0.5em;
     border: solid 1px #bdb8b8;
     background: #f5f3f3;
-width: 100%;
+width: 95%;
 }
 .tcw-form > label > input[type=checkbox] {
    width: 17px;

@@ -44,6 +44,7 @@ class TransportCalcMath
        //$step = $options[0]["persent"] ;
 
        $price = ["price" => $priceCalc + $optionsSum,
+       'passingcargo' => round(($priceCalc + $optionsSum) * 0.7),
        'message' => $car[0]->msg
            ];
 
