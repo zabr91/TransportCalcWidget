@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-05-06 19:52+0300\n"
+"PO-Revision-Date: 2021-05-06 21:56+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: backend\n"
+"X-Poedit-SearchPath-1: frontend\n"
+"X-Poedit-SearchPathExcluded-0: frontend/assets\n"
+"X-Poedit-SearchPathExcluded-1: backend/assets\n"
+
+#: backend/controllers/TableMessages.php:114
+#: backend/controllers/TablePrice.php:111
+msgid "delete"
+msgstr "Удалить"
+
+#: backend/controllers/TablePrice.php:110
+msgid "edit"
+msgstr "Редактировать"
+
+#: frontend/controllers/PluginTransportCalc.php:115
+msgid "Transport Calc"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:19
+msgid "Elementor Transport Calc"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:32
+msgid "Settings"
+msgstr "Настройки"
+
+#: frontend/widgets/transport_calc_widget.php:42
+msgid "Title block"
+msgstr "Название блока"
+
+#: frontend/widgets/transport_calc_widget.php:44
+msgid "List Title"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:51
+msgid "Selector"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:53
+msgid ".class"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:60
+msgid "Show title"
+msgstr "Показать заголовок"
+
+#: frontend/widgets/transport_calc_widget.php:62
+#: frontend/widgets/transport_calc_widget.php:73
+#: frontend/widgets/transport_calc_widget.php:85
+#: frontend/widgets/transport_calc_widget.php:97
+#: frontend/widgets/transport_calc_widget.php:123
+msgid "Show"
+msgstr "Показать"
+
+#: frontend/widgets/transport_calc_widget.php:63
+#: frontend/widgets/transport_calc_widget.php:74
+#: frontend/widgets/transport_calc_widget.php:86
+#: frontend/widgets/transport_calc_widget.php:98
+#: frontend/widgets/transport_calc_widget.php:124
+msgid "Hide"
+msgstr "Скрыть"
+
+#: frontend/widgets/transport_calc_widget.php:71
+msgid "Show price"
+msgstr "Показать цену"
+
+#: frontend/widgets/transport_calc_widget.php:83
+msgid "Active on start"
+msgstr "Активный с самого начала"
+
+#: frontend/widgets/transport_calc_widget.php:95
+msgid "Floor"
+msgstr "Этаж"
+
+#: frontend/widgets/transport_calc_widget.php:106
+msgid "List Style"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:110
+msgid "Check"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:111
+msgid "Radio"
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:121
+msgid "Visible block "
+msgstr "Показать блок"
+
+#: frontend/widgets/transport_calc_widget.php:131
+#: frontend/widgets/transport_calc_widget.php:133
+msgid "Name"
+msgstr "Имя"
+
+#: frontend/widgets/transport_calc_widget.php:138
+#: frontend/widgets/transport_calc_widget.php:140
+msgid "Value"
+msgstr "Значение"
+
+#: frontend/widgets/transport_calc_widget.php:145
+#: frontend/widgets/transport_calc_widget.php:147
+msgid "Tooltip"
+msgstr "Подсказка"
+
+#: frontend/widgets/transport_calc_widget.php:152
+#: frontend/widgets/transport_calc_widget.php:154
+msgid "min_price"
+msgstr "Добавить фикс. сумму"
+
+#: frontend/widgets/transport_calc_widget.php:159
+#: frontend/widgets/transport_calc_widget.php:161
+msgid "present"
+msgstr "Добавить процент к сумме"
+
+#: frontend/widgets/transport_calc_widget.php:169
+msgid "Options"
+msgstr "Опции"
+
+#: frontend/widgets/transport_calc_widget.php:174
+msgid "Loading into"
+msgstr "Загрузка"
+
+#: frontend/widgets/transport_calc_widget.php:175
+#: frontend/widgets/transport_calc_widget.php:181
+#: frontend/widgets/transport_calc_widget.php:187
+msgid "Item content. Click the edit button to change this text."
+msgstr ""
+
+#: frontend/widgets/transport_calc_widget.php:180
+msgid "Unloading"
+msgstr "Загрузка"
+
+#: frontend/widgets/transport_calc_widget.php:186
+msgid "Pacacing"
+msgstr "Упаковка"

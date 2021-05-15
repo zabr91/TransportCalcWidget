@@ -10,7 +10,7 @@ class Transport_calc_widget extends Widget_Base {
 
 	
 
-	public static $slug = 'elementor-transport_calc_widget';
+	public static $slug = TCW_TEXT_DOMAIN;
 
 	//public static $text_domain = '';
 
@@ -207,8 +207,9 @@ class Transport_calc_widget extends Widget_Base {
      '</div>'.
      	'<div class="calculate-from-data flex">'.
 		'<div class="calculate-from-data-one flex">'.
+        self::htmlbuilder_input_number('mass', 'mass', 0.5, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
 		self::htmlbuilder_input_number('size', 'size', 1, 'Объем, м3',     '[0-9]+([\.,][0-9]+)?').
-		self::htmlbuilder_input_number('mass', 'mass', 0.5, 'Вес, тонны',  '[0-9]+([\.,][0-9]+)?').
+
 		'</div><div class="calculate-from-data-two flex">'.
 		'<p id="passingcargo"></p>'.
 	//	self::htmlbuilder_switch().
@@ -309,7 +310,7 @@ class Transport_calc_widget extends Widget_Base {
 			$html .= '</div>'.self::htmlbuilder_block_check_list($block).'</div>';
 		}
 
-		return $html;
+		return $html.'</div>';
 	}
 
 	public static function parmsBuilder($block, $i){
@@ -329,11 +330,11 @@ class Transport_calc_widget extends Widget_Base {
 	self::parmsBuilder($block, $i).'>
 					<label for="check1">'.$block['name'.$i].'</label>';
 
-		//if($block['tooltip'.$i] === 'yes')
+		if($block['tooltip'.$i] === 'yes')
 		$html .='<button type="button" class="tooltip-btn" data-toggle="tooltip" data-placement="top" title="Рассчитывается нашим менеджером">?</button>';
 		}
 
-		$html .= '</div></div>';
+		$html .= '</div>';
 		return $html;
 	}
 

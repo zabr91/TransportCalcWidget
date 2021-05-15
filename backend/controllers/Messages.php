@@ -12,14 +12,14 @@ class Messages{
 	{
 		$this->delete();
 
-		$this->save();
+		//$this->save();
 		add_action( 'admin_menu', [&$this, 'add_admin_menu'] );
 	}
 
 	public function add_admin_menu(){
 		$hook = add_submenu_page( 'transportcalc-settings', 
-			'Messages', 
-			'Messages',
+			'Сообщения', 
+			'Сообщения',
             'manage_options',
             'transportcalc-sub-settings',
         	[&$this, 'wiev']);
@@ -67,7 +67,7 @@ class Messages{
 	private function delete()
 	{
 		if(isset($_GET['action'])) {
-	    if($_GET['action'] == 'delete')
+	    if($_GET['action'] == 'deletemessage')
 		{
 			$price = new BaseCustomData('tc_messages');
 		   

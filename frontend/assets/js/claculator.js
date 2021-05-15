@@ -1,6 +1,6 @@
 jQuery(function ($) {
 
-	$(document).ready(function(){ 
+	$( document ).ready(function() {
 		'use strict';
 
 		var appSettings = {
@@ -43,8 +43,8 @@ jQuery(function ($) {
 			   	'<label>e-mail</label>'+
 			   	'<input type="email" size="40" value="" name="email" class="email" placeholder="Почта"/>'+
 			   '</div>'+	
-			   ' <div class="flex">Наличныe <label class="switch"><input type="checkbox" class="apcept"><span class="slider round"></span></label>Безналичные</div>'+		   
-			   	'<label><input type="checkbox"/> Заполняя форму обратной связи я даю согласие на обработку своих персональных данных</label>'+
+			   ' <div class="flex">Наличныe <label class="switch"><input type="checkbox"><span class="slider round"></span></label>Безналичные</div>'+		   
+			   	'<label><input type="checkbox" id="apcept"/> Заполняя форму обратной связи я даю согласие на обработку своих персональных данных</label>'+
 			  '<form>';
 
 
@@ -61,18 +61,18 @@ jQuery(function ($) {
             	$.alert({
     				title: 'Подать заявку',
     				theme: 'supervan',
+    				backgroundDismiss: function(){
+       						 return false; // modal wont close.
+    				},
     				 closeIcon: true,
     				content: htmlForm,
     				buttons: {
                  formSubmit: {
                   text: 'Отпавить',
                   btnClass: 'btn-blue',
-                 action: function () {
-                 	var name = this.$content.find('.apcept').val();
-                 	var name = this.$content.find('.name').val();
-                 	var phone = this.$content.find('.phone').val();
-                 	var email = this.$content.find('.email').val();
-					sendData(name, phone, email);
+                 action: function () {				
+
+					return sendData(this);
 
 					},
 				 cancel: function () {
@@ -105,10 +105,10 @@ jQuery(function ($) {
 			appSettings['mapControlsRemove'].forEach(element => appMap.controls.remove(element));
 
 		
-			inputFrom.on('change', function(){ routeInit();});
-			inputTo.on  ('change', function(){ routeInit();});
+			inputFrom.on('input', function(){ routeInit();});
+			inputTo.on  ('input', function(){ routeInit();});
 
-			inputVolume.bind("keyup change wheel", function(){
+			inputVolume.bind("keyup input wheel", function(){
 			  var c1, c2, b1, b2;
 
 			  /* if(inputWeight.val() < 0.5) {
@@ -125,7 +125,7 @@ jQuery(function ($) {
 			   calculateDistancePrice(lengthval);
 			});
 
-		    inputWeight.bind("keyup change wheel", function(){
+		    inputWeight.bind("keyup input wheel", function(){
 			var val = $(this).val();
 
 				inputVolume.val(tonnaToMcub(val)); 
@@ -209,11 +209,7 @@ jQuery(function ($) {
                   text: 'Отпавить',
                   btnClass: 'btn-blue',
                  action: function () {
-                 	var name = this.$content.find('.apcept').val();
-                 	var name = this.$content.find('.name').val();
-                 	var phone = this.$content.find('.phone').val();
-                 	var email = this.$content.find('.email').val();
-					sendData(name, phone, email);
+                 	return sendData(this);
 
 					},
 				 cancel: function () {
@@ -232,23 +228,79 @@ jQuery(function ($) {
 	 }
 
 		};
-		function sendData(name, phone, email) {
-			$.ajax({
-        	type: "GET",
-        	url:  ajax_object.ajaxurl,
-        	data: {
-        		action: 'send_data',
-        		name : name,
-        		phone: phone,
-        		email : email,
-        		pointa: 0,
-        		pointb: 0,
-        		options: getSelectOptions()
-        	},
-        	success: function (response) {
-        		console.log(response);
-        	}
-        	});
+
+
+		function chkField(field){
+			if(field.val().length < 1) {
+				field.css('border', 'solid 4px red');
+				return false;
+			}
+			else {
+				field.css('border', 'none');
+			}
+		}
+
+		function sendData(thisform) {
+
+			var apceptChk = thisform.$content.find('#apcept');			
+
+			if(apceptChk.prop('checked')) {
+			
+
+					var name =  thisform.$content.find('.name').val();
+                 	var phone = thisform.$content.find('.phone').val();
+                 	var email = thisform.$content.find('.email').val();
+
+                 	if( chkField(thisform.$content.find('.name'))  == false  || 
+                 		chkField(thisform.$content.find('.phone')) == false  ||
+                 		chkField(thisform.$content.find('.email')) == false )
+                 	{
+                 		return false;
+                 	}
+                 
+
+                 var regEx = /^[A-Z0-9][A-Z0-9._%+-]{0,63}@(?:[A-Z0-9-]{1,63}.){1,125}[A-Z]{2,63}$/;
+      			 var validEmail = regEx.test(email);
+      			if (!validEmail) {
+        			thisform.$content.find('.email').css('border', 'red');
+        			return false;
+      			}
+
+
+                $.ajax({
+        			type: "GET",
+        			url:  ajax_object.ajaxurl,
+        			data: {
+        			action: 'send_data',
+        			name : name,
+        			phone: phone,
+        			email : email,
+        			pointa: inputFrom.val(),
+        			pointb: inputTo.val(),
+        			options: getSelectOptions()
+        			},
+        			success: function (response) {
+
+        				if(response == 1){
+        					$.alert({
+   							 title: 'Сообщение принято',
+   							 content: 'Наш менеджер свяжется с Вами в ближайшее время.',
+   							 theme: 'material',
+							});
+        				}
+        			}
+        		});
+
+
+
+
+			}
+			else{
+				alert('Для отправки формы необходимо согласится с обработкой персональных данных');
+				return false;
+			}
+
+			return true;
 		}
 
 		function getSelectOptions(){

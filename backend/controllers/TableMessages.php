@@ -58,7 +58,7 @@ class TableMessages extends WP_List_Table {
 		return array(
 			'cb'            => '<input type="checkbox" />',
 			'actions'       =>   'Функции',
-			'id'            => 'ID',
+			//'id'            => 'ID',
 			'name' 	    	=> 'Имя',
 			'phone' 		=> 'Телефон',
 			'email' 		=> 'E-mail',
@@ -111,7 +111,7 @@ class TableMessages extends WP_List_Table {
 			
 			$actions = array();
 			//$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id, __('edit','hb-users') );
-			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=delete&id='.$item->id, __('delete','hb-users') );
+			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=deletemessage&id='.$item->id, __('delete',TCW_TEXT_DOMAIN) );
 
 			return ( isset( $item->name ) ? esc_html( $item->name ) : " " ). $this->row_actions( $actions );
 		}

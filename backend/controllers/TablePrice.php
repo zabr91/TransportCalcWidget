@@ -61,10 +61,10 @@ class TablePrice extends WP_List_Table {
 			//'id'            => 'ID',
 			'title' 		=> 'Заголовок',
 			'description'   => 'Описание',
-			'distance'   	=> 'Расстояние',
+			'distance'   	=> 'Расстояние, км',
 			'weight'   		=> 'Масса, т',
 			'volume'  		=> 'Объем, м3',
-			'price'  		=> 'Цена за км',
+			'price'  		=> 'Цена за км, руб',
 			'msg'  			=> 'Сообщение',
 		);
 	}
@@ -72,7 +72,7 @@ class TablePrice extends WP_List_Table {
 	// сортируемые колонки
 	function get_sortable_columns(){
 		return array(
-			'title' => array( 'name', 'desc' ),
+			'title' => array( 'price', 'desc' ),
 		);
 	}
 
@@ -107,8 +107,9 @@ class TablePrice extends WP_List_Table {
 
 			
 			$actions = array();
-			$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id, __('edit','hb-users') );
-			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=delete&id='.$item->id, __('delete','hb-users') );
+			$actions['edit'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=edit&id='.$item->id,
+			 __('edit', TCW_TEXT_DOMAIN) );
+			$actions['delete'] = sprintf( '<a href="%s">%s</a>', '?page='.$_GET['page'].'&action=deleteprice&id='.$item->id, __('delete', TCW_TEXT_DOMAIN) );
 
 			return ( isset( $item->name ) ? esc_html( $item->name ) : " " ). $this->row_actions( $actions );
 		}

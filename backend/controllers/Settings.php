@@ -28,7 +28,7 @@ class Settings
 
 		// создаем страницу в меню, куда выводим таблицу
 		add_action( 'admin_menu', function(){//page-slug
-			$hook = add_menu_page( 'Настройки плагина TransportCalc', 'TransportCalc', 'manage_options', 'transportcalc-settings', 
+			$hook = add_menu_page( 'Настройки плагина TransportCalc', 'Настройки TransportCalc', 'manage_options', 'transportcalc-settings', 
 				[&$this, 'wiev'], 'dashicons-calculator', 100 );
 
 			/*if(isset($_GET['action'])) {
@@ -93,7 +93,7 @@ class Settings
 	private function delete()
 	{
 		if(isset($_GET['action'])) {
-	    if($_GET['action'] == 'delete')
+	    if($_GET['action'] == 'deleteprice')
 		{
 			$price = new BaseCustomData('tc_price');
 		   
@@ -111,6 +111,9 @@ class Settings
 	add_settings_field('yandex_api', 'Яндекс API', [&$this, 'fill_yandex_api'], 'TransportCalc', 'section_id' );
 
 	add_settings_field('email', 'email менеджера', [&$this, 'fill_email'],       'TransportCalc', 'section_id' );
+
+
+	add_settings_field('fromemail', 'email с которого будет отправка менеджеру', [&$this, 'fill_fromemail'],       'TransportCalc', 'section_id' );
    }
 
    function fill_yandex_api(){
@@ -128,7 +131,14 @@ class Settings
 		<input type="text" name="TransportCalc[email]" value="<?php echo esc_attr( $val ) ?>" />
 		<?php
 	}
-
+    
+    function fill_fromemail(){
+	$val = get_option('TransportCalc');
+	$val = isset($val['fromemail']) ? $val['fromemail'] : get_option('admin_email');
+		?>
+		<input type="text" name="TransportCalc[fromemail]" value="<?php echo esc_attr( $val ) ?>" />
+		<?php
+	}
 	/*
 	function fill_primer_field2(){
 		$val = get_option('TransportCalc');

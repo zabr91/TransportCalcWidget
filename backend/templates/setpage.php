@@ -8,12 +8,11 @@
 				submit_button();
 			?>
 		</form>
-
+	<hr />
     <h3>Таблица стоимости доставки груза</h3>
-	<a href="?page=<?= $_GET['page'] ?>&action=create"  class="btn">Создать новую стоимость</a>	
+	<a href="?page=<?= $_GET['page'] ?>&action=create"  class="button button-primary">Создать новую стоимость</a>	
 	
 	<?php
-	// выводим таблицу на экран где нужно
 	echo '<form action="" method="POST">';
 	if($GLOBALS['Example_List_Table']) $GLOBALS['Example_List_Table']->display();
 	echo '</form>';

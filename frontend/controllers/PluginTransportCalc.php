@@ -155,7 +155,7 @@ class PluginTransportCalc {
     'email' =>  strip_tags($_REQUEST['email'])
     ];
     
-   $formTo = get_option('TransportCalc')['yandex_api'];
+   $formTo = get_option('TransportCalc')['email'];
 
     if(isset($formTo)) {
 
@@ -165,18 +165,24 @@ class PluginTransportCalc {
     "<p>Телефон ".$data['phone']."</p>".
     "<p>email ".$data['email']."</p>";
 
+    $headers = 'From: TransportCalc <'.get_option('TransportCalc')['fromemail'].'>' . "\r\n";
     
-    wp_mail( $formTo, $formSubject, $formMessage );
-    }
+    if(wp_mail( $formTo, $formSubject, $formMessage,$headers )){
+     // echo "send mail";
+    } }
 
    $messages = new BaseCustomData('tc_messages');
    $messages->insert($data);
    unset($messages);
 
-   echo "OK";
-   
+   echo "1";   
 
-    wp_die();
+   wp_die();
+  }
+
+  public function ajax_get_table() {
+    $pricetable = new BaseCustomData('tc_price');
+    $pricetable->get_all('volume, weight');
   }
 
   /**
@@ -207,6 +213,10 @@ class PluginTransportCalc {
     add_action( 'wp_ajax_send_data',        [ $this, 'ajax_send_data'] );
     
     add_action( 'wp_ajax_nopriv_send_data', [ $this, 'ajax_send_data'] );
+
+    add_action( 'wp_ajax_send_data',        [ $this, 'ajax_get_table'] );
+    
+    add_action( 'wp_ajax_nopriv_send_data', [ $this, 'ajax_get_table'] );
 
     }
 }

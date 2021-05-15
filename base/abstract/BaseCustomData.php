@@ -54,13 +54,15 @@ class BaseCustomData
      *
      * @param  String $orderBy - Order by column name
      *
+     * @param  String $colums - select colums
+     *
      * @return Table result
      */
-    public function get_all( $orderBy = NULL )
+    public function get_all( $orderBy = NULL, $colums = "*" )
     {
         global $wpdb;
 
-        $sql = 'SELECT * FROM `'.$this->tableName.'`';
+        $sql = 'SELECT '.$colums.' FROM `'.$this->tableName.'`';
 
         if(!empty($orderBy))
         {
