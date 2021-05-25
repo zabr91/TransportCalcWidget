@@ -9,11 +9,14 @@
     -webkit-box-align: center;
     -ms-flex-align: center;
     -webkit-align-items: center;
-    align-items: center   
+    align-items: center
 }
 
+
+
+
 .calculate-from_top {
-    padding-bottom: 40px;
+    padding-bottom: 0px;
     width: 100%;
     padding-left: 98px;
     padding-right: 98px;
@@ -84,7 +87,7 @@
     color: #000000;
     font-size: 16px;
     font-weight: 700;
-        margin: 0;
+    margin: 0;
     padding: 0;
 }
 
@@ -106,7 +109,7 @@
     flex-direction: column;
 }
 .calculate-from-data-two{
-	padding-top: 30px;
+    padding-top: 30px;
     flex-direction: column;
     align-content: center;
     align-items: center;
@@ -125,6 +128,7 @@
     display: flex;
     background-color: #2e3191;
     border: none;
+
 }
 
 .calculate-from-data-two-button .big-button:before {
@@ -196,6 +200,8 @@
     transition: .6s;
     -webkit-box-shadow: 0px 0px 25px 5px rgb(0 0 0 / 19%);
     box-shadow: 0px 0px 25px 5px rgb(0 0 0 / 19%);
+    border-radius: 15px;
+    margin-top: -20px;
 }
 .calc-col-1 {
     -ms-flex-preferred-size: 100%;
@@ -215,11 +221,11 @@
 
 .calculate-from-detailed-block {
     -webkit-box-pack: center;
--ms-flex-pack: center;
--webkit-justify-content: center;
-justify-content: center;
-    padding: 0px 40px 40px 40px;
-
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    padding: 0px 40px 0px 40px;
+    margin: -20px;
 }
 
 .calculate-from-detailed-block__price {
@@ -290,12 +296,12 @@ justify-content: center;
     background: transparent;
     opacity: 0;
     -webkit-transform: rotate(
--45deg
-);
+            -45deg
+    );
     -ms-transform: rotate(-45deg);
     transform: rotate(
--45deg
-);
+            -45deg
+    );
 }
 
 .calculate-from-detailed-block-total {
@@ -324,7 +330,7 @@ justify-content: center;
     -webkit-transition: .4s;
     -o-transition: .4s;
     transition: .4s;
-  
+
 }
 
 button.tooltip-btn {
@@ -516,40 +522,40 @@ button.tooltip-btn {
 }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 #close-modal{
@@ -561,19 +567,19 @@ button.tooltip-btn {
     margin-bottom: 1px;
     text-transform: uppercase;
     font-weight: bolder;
-   
+
 }
 .tcw-form > div > input {
-border-radius: 0.5em;
+    border-radius: 0.5em;
     border: solid 1px #bdb8b8;
     background: #f5f3f3;
-width: 95%;
+    width: 95%;
 }
 .tcw-form > label > input[type=checkbox] {
-   width: 17px;
-   height: 17px;  
+    width: 17px;
+    height: 17px;
 }
-   
+
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
@@ -590,44 +596,44 @@ width: 95%;
 
 /*Media*/
 @media (max-width: 991px){
-.calculate-from-position {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    background-color: transparent;
-}
-
-.calculate-from-position__from, .calculate-from-position__to {
-    margin-bottom: 30px;
-    -webkit-box-shadow: 0px 0px 0px 7px #ffae00;
-    box-shadow: 0px 0px 0px 7px #ffae00;
-}
-.calculate-from-data {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
+    .calculate-from-position {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
         flex-direction: column;
-    -webkit-box-align: center;
+        background-color: transparent;
+    }
+
+    .calculate-from-position__from, .calculate-from-position__to {
+        margin-bottom: 30px;
+        -webkit-box-shadow: 0px 0px 0px 7px #ffae00;
+        box-shadow: 0px 0px 0px 7px #ffae00;
+    }
+    .calculate-from-data {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+        -webkit-box-align: center;
         align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-}
-.calculate-from_bottom-wrap {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-}
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
+    .calculate-from_bottom-wrap {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
 }

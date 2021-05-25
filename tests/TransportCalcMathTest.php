@@ -1,81 +1,69 @@
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
+
 use TransportCalc\TransportCalcMath;
 
 final class TransportCalcMathTest extends TestCase
 {
-	public function testOneCar(): void
+	public function testSelectFirstCar(): void
     {
         $this->assertEquals(
-            TransportCalcMath::getCarByWeightVolume(1.2, 9),
-            0
+            TransportCalcMath::getCarPriceByParms(300, 0.9,9)->price,
+            22
         );
     }
 
-    public function testTwoCar(): void
+
+    public function testSelectFirstCar2(): void
     {
         $this->assertEquals(
-            TransportCalcMath::getCarByWeightVolume(3.4, 19),
-            1
+            TransportCalcMath::getCarPriceByParms(300, 1,10)->price,
+            22
         );
     }
 
-    public function testMiniCar(): void
+    public function testSelectTridCar(): void
     {
         $this->assertEquals(
-            TransportCalcMath::getCarByWeightVolume(1, 150),
-            0
+            TransportCalcMath::getCarPriceByParms(300, 3,20)->price,
+            32
         );
     }
 
-   public function testDistanseDoublePrice(): void
-   {
-   	$this->assertEquals(
-            TransportCalcMath::calcPriceByDispanseWeightVolume(196, 1.2, 9),
-                8624
+    public function testSelectMaxCar(): void
+    {
+        $this->assertEquals(
+            TransportCalcMath::getCarPriceByParms(300, 20,120)->price,
+            90
         );
-   }
+    }
 
-   public function testDistanse(): void
-   {
-   	$this->assertEquals(
-            TransportCalcMath::calcPriceByDispanseWeightVolume(202, 1.2, 9),
-                4444
+    public function testSelectCarByTablble(): void
+    {
+        // МСК - СПБ (780км) 4 тонны 63 куба ?
+        $this->assertEquals(
+            TransportCalcMath::getCarPriceByParms(780, 4,63)->price,
+            75
         );
-   }
+    }
 
-   public function testDistanseDoublePriceRefrigerator(): void
-   {
-   	$this->assertEquals(
-		TransportCalcMath::calcRefrigerator(
-            TransportCalcMath::calcPriceByDispanseWeightVolume(196, 1.2, 9)
-        ),
 
-                9486.4
+    public function testMSKtoSPB(): void
+    {
+        // МСК - СПБ (780км) 4 тонны 63 куба ?
+        $this->assertEquals(
+            TransportCalcMath::calculate(780, 4,63)["price"],
+            58500
         );
-   }
+    }
 
-   public function testDistanseDoublePriceRefrigeratorCalculator(): void
-   {
-   	$this->assertEquals(
-		TransportCalcMath::calcRefrigerator(
-            TransportCalcMath::calculate(196, 1.2, 9, true)
-        ),
 
-                9486.4
+    public function testRoundPrice(): void
+    {
+        $this->assertEquals(
+            TransportCalcMath::roundPrice(1999),
+            2000
         );
-   }
-   
-   public function testDista(): void
-   {
-    $this->assertEquals(
-    TransportCalcMath::calcRefrigerator(
-            TransportCalcMath::calculate(10, 50, 35)
-        ),
-
-                9486.4
-        );
-   }
-
+    }
 
 }

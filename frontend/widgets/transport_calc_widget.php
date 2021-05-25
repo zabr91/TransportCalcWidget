@@ -345,7 +345,7 @@ class Transport_calc_widget extends Widget_Base {
 			for ($i = 0; $i < 3 ; $i++) { 
 				if($block['item_switcher'.$i] === 'yes'){
 		$html .=
-  '<input type="checkbox" class="oversized calc-options" name="option'.$i.'" value="'.$block['value'.$i].'" '.
+  '<input type="checkbox" class="oversized calc-options" name="option'.$i.'" value="'.$block['name'.$i].'" '.
   self::parmsBuilder($block, $i).' >
   <label for="check1">'.$block['name'.$i].'</label><br />';		
 				}

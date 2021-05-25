@@ -62,13 +62,13 @@ class TableMessages extends WP_List_Table {
 			'name' 	    	=> 'Имя',
 			'phone' 		=> 'Телефон',
 			'email' 		=> 'E-mail',
-			/*'pointa' 		=> 'С пункта А',
-			'pointb' 		=> 'В пункта B',
-			'distance'   	=> 'Distance',
-			'weight'   		=> 'Weight',
-			'volume'  		=> 'Volume',
-			'price'  		=> 'Price',
-			'options'  		=> 'Опиции',*/
+			'from' 		=> 'С пункта А',
+			'to' 		=> 'В пункта B',
+			'distance'   	=> 'Дистанция',
+			'weight'   		=> 'Объем',
+			'volume'  		=> 'Масса',
+			'price'  		=> 'Цена',
+			'options'  		=> 'Опиции',
 		);
 	}
 

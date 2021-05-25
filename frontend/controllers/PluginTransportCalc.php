@@ -149,40 +149,85 @@ class PluginTransportCalc {
 
   public function ajax_send_data() {
 
-    $data =[
-    'name' =>  strip_tags($_REQUEST['name']),
-    'phone' =>  strip_tags($_REQUEST['phone']),
-    'email' =>  strip_tags($_REQUEST['email'])
+    $dataClient =[
+    'Имя' =>  strip_tags($_REQUEST['name']),
+    'Телефон' =>  strip_tags($_REQUEST['phone']),
+    'email' =>  strip_tags($_REQUEST['email']),
+        //'from' => strip_tags($_REQUEST['from']),
+        //'from' => strip_tags($_REQUEST['to']),
+    ];
+
+    $dataRoute = [
+        'ПунктА' => strip_tags($_REQUEST['from']),
+        'ПункиВ' => strip_tags($_REQUEST['to']),
+        'Расстояние' => strip_tags($_REQUEST['distance']),
+        'Объем' => strip_tags($_REQUEST['volume']),
+        'Масса' => strip_tags($_REQUEST['weight']),
+        'Цена' => strip_tags($_REQUEST['price']),
+        'Форма оплаты' => strip_tags($_REQUEST['formpay']),
+        'Опции' => strip_tags($_REQUEST['options']),
     ];
     
    $formTo = get_option('TransportCalc')['email'];
 
     if(isset($formTo)) {
 
-    $formSubject = "Новое сообщение с сайта";
-    $formMessage = 
-    "<p>Имя ".$data['name']."</p>".
-    "<p>Телефон ".$data['phone']."</p>".
-    "<p>email ".$data['email']."</p>";
+        $dataTimeNow = date("Y-m-d H:i:s");
 
-    $headers = 'From: TransportCalc <'.get_option('TransportCalc')['fromemail'].'>' . "\r\n";
+        $formSubject = "Новое сообщение с сайта ".get_site_url();
+        ob_start();
+			include(TCW_PLUGIN_DIR.'frontend/assets/email/email-template.php');
+			$emailContent = ob_get_contents();
+		ob_end_clean();
+
+     //   echo $emailContent;
+
+    $headers = ['Content-Type: text/html; charset=UTF-8',
+        'From: TransportCalc <'.get_option('TransportCalc')['fromemail'].'>' . "\r\n"];
     
-    if(wp_mail( $formTo, $formSubject, $formMessage,$headers )){
-     // echo "send mail";
+    if(wp_mail( $formTo, $formSubject, $emailContent,$headers )){
+        echo "1";
     } }
+
+    $data = [
+        'name' => strip_tags($_REQUEST['name']), //1
+        'phone' => strip_tags($_REQUEST['phone']), //2
+        'from' => strip_tags($_REQUEST['from']), //3
+        'to'  => strip_tags($_REQUEST['to']), //4
+        'distance' =>  strip_tags($_REQUEST['distance']), //5
+        'volume' =>  strip_tags($_REQUEST['volume']), //6
+        'weight' =>  strip_tags($_REQUEST['weight']), //7
+        'options' =>  strip_tags($_REQUEST['options']), //8
+        'email' =>  strip_tags($_REQUEST['email']), //9
+        'price' =>  strip_tags($_REQUEST['price']) //10
+    ];
 
    $messages = new BaseCustomData('tc_messages');
    $messages->insert($data);
-   unset($messages);
 
-   echo "1";   
+   //echo $wpdb->show_errors;
+
+   unset($messages);
 
    wp_die();
   }
-
+    /*
+    * @return Array weight, volume for placeholder
+    */
   public function ajax_get_table() {
     $pricetable = new BaseCustomData('tc_price');
-    $pricetable->get_all('volume, weight');
+    $table = $pricetable->get_all(null, 'weight, volume');
+
+    $arr = [];
+    $countRows = count($table);
+
+    for ($i=0; $i < $countRows; $i++){
+        $arr[$i][0] = $table[$i]->weight;
+        $arr[$i][1] = $table[$i]->volume;
+    }
+
+    echo json_encode($arr);
+    wp_die();
   }
 
   /**
@@ -206,6 +251,8 @@ class PluginTransportCalc {
     // Register widgets
     add_action( 'elementor/widgets/widgets_registered', [ $this, 'register_widgets' ] );
 
+
+    // Register ajax metods
     add_action( 'wp_ajax_get_price',        [ $this, 'ajax_get_price'] );
     
     add_action( 'wp_ajax_nopriv_get_price', [ $this, 'ajax_get_price'] );
@@ -214,9 +261,9 @@ class PluginTransportCalc {
     
     add_action( 'wp_ajax_nopriv_send_data', [ $this, 'ajax_send_data'] );
 
-    add_action( 'wp_ajax_send_data',        [ $this, 'ajax_get_table'] );
+    add_action( 'wp_ajax_get_table',        [ $this, 'ajax_get_table'] );
     
-    add_action( 'wp_ajax_nopriv_send_data', [ $this, 'ajax_get_table'] );
+    add_action( 'wp_ajax_nopriv_get_table', [ $this, 'ajax_get_table'] );
 
     }
 }

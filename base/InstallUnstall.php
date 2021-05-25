@@ -36,11 +36,10 @@ class TransportCalcInstallUnstall
 		 $table_messages = $wpdb->prefix . 'tc_messages';
 		 $sql = "
 
-
 		 CREATE TABLE IF NOT EXISTS $table_price ( `id` INT NOT NULL AUTO_INCREMENT , `title` VARCHAR(100) NOT NULL , `description` TINYTEXT NOT NULL , `weight` FLOAT  NOT NULL , `distance` INT  NOT NULL , `volume` FLOAT NOT NULL , `price` DECIMAL NOT NULL , `msg` TINYTEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS $table ( `id` INT NOT NULL , `send` TIMESTAMP NOT NULL , `name` VARCHAR(100) NOT NULL , `phone` VARCHAR(20) NOT NULL , `pointa` VARCHAR(100) NULL , `pointb` VARCHAR(100) NULL , `distance` INT NULL , `volume` FLOAT  NULL , `weight` INT NULL , `options` JSON NULL , `email` VARCHAR(255) NULL , `price` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+        CREATE TABLE IF NOT EXISTS $table_messages ( `id` INT NOT NULL , `send` TIMESTAMP NOT NULL , `name` VARCHAR(100) NOT NULL , `phone` VARCHAR(20) NOT NULL , `from` VARCHAR(100) NULL , `to` VARCHAR(100) NULL , `distance` INT NULL , `volume` FLOAT  NULL , `weight` INT NULL , `options` TEXT NULL , `email` VARCHAR(255) NULL , `price` INT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
 		 ";
