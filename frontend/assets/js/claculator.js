@@ -25,27 +25,20 @@ jQuery(function ($) {
         var sendBtn = $('#send-calc-result');
         var calcOptions = $(".calc-options");
         var openDialog = false;
-        var tableConf = [
-            /*	[1.5,  10],
-                [3.5,  20],
-                [5.5,  35],
-                [9.5,	50],
-                [20,	82] */
-        ];
 
         var htmlForm =
             '<form class="tcw-form">' +
             '<div>' +
             '<label>Имя</label>' +
-            '<input type="text" size="40"  value="" name="name" class="name" placeholder="Имя"/>' +
+            '<input type="text" size="40"  value="" name="name" class="name" placeholder="Имя" required/>' +
             '</div>' +
             '<div>' +
             '<label>Телефон</label>' +
-            '<input type="tel" size="40"  value="" name="phone" class="phone"  placeholder="+7(__)__-__-__" />' +
+            '<input type="tel" size="40"  value="" name="phone" class="phone" data-grouplength="5,"  placeholder="+7(__)__-__-__" required/>' +
             '</div>' +
             '<div>' +
             '<label>e-mail</label>' +
-            '<input type="email" size="40" value="" name="email" class="email" placeholder="Почта"/>' +
+            '<input type="email" size="40" value="" name="email" class="email" placeholder="Почта" required/>' +
             '</div>' +
             ' <div class="flex">Наличныe <label class="switch"><input type="checkbox" id="formpay" value="Наличные"><span class="slider round"></span></label>Безналичные</div>' +
             '<label><input type="checkbox" id="apcept"/> Заполняя форму обратной связи я даю согласие на обработку своих персональных данных</label>' +
@@ -56,7 +49,7 @@ jQuery(function ($) {
         if (appSettings['map']) {
             appInit();
         }
-        ;
+
 
         //on select option
         calcOptions.on("click", function (e) {
@@ -71,7 +64,7 @@ jQuery(function ($) {
 
             $.alert({
                 title: 'Подать заявку',
-                theme: 'supervan',
+                theme: 'modern',
                 backgroundDismiss: function () {
                     return false; // modal wont close.
                 },
@@ -114,19 +107,6 @@ jQuery(function ($) {
                 }
             });
 
-            $.ajax({
-                type: "GET",
-                url: ajax_object.ajaxurl,
-                data: {
-                    action: 'get_table'
-                },
-                success: function (response) {
-
-                    var responseJSON = JSON.parse(response);
-                    tableConf = responseJSON;
-                }
-            });
-
             mapInit();
         }
 
@@ -141,33 +121,43 @@ jQuery(function ($) {
                 appSettings['mapBehaviorsDisables'].forEach(element => appMap.behaviors.disable(element));
                 appSettings['mapControlsRemove'].forEach(element => appMap.controls.remove(element));
 
+                let timeout = null;
 
                 inputFrom.on('input', function () {
-                    routeInit();
+                    clearTimeout(timeout);
+
+                    timeout = setTimeout(function () {
+                        routeInit();
+                    }, 1000);
+
                 });
+
                 inputTo.on('input', function () {
-                    routeInit();
+                    clearTimeout(timeout);
+
+                    timeout = setTimeout(function () {
+                        routeInit();
+                    }, 1000);
+
                 });
 
                 inputVolume.bind("keyup input wheel", function () {
-                    var c1, c2, b1, b2;
+                    clearTimeout(timeout);
 
-                    c1 = inputVolume.val();
-                    c2 = inputWeight.val();
+                    timeout = setTimeout(function () {
+                        calculateDistancePrice(lengthval)
+                    }, 1000);
 
-                    b1 = tonnaToMcub(c2);
-                    b2 = mcubTotonna(c1);
 
-                    inputWeight.val(b2);
-                    calculateDistancePrice(lengthval);
                 });
 
                 inputWeight.bind("keyup input wheel", function () {
-                    var val = $(this).val();
+                    clearTimeout(timeout);
 
-                    inputVolume.val(tonnaToMcub(val));
+                    timeout = setTimeout(function () {
+                        calculateDistancePrice(lengthval)
+                    }, 1000);
 
-                    calculateDistancePrice(lengthval);
                 });
 
             });
@@ -180,7 +170,7 @@ jQuery(function ($) {
 
         //    mask('#map', true);
 
-            if (inputTo.val() != '' && inputFrom.val() != '') {
+            if (inputTo.val() !== '' && inputFrom.val() !== '') {
                 ymaps.route([inputFrom.val(), inputTo.val()], {
                     multiRoute: true,
                     mapStateAutoApply: true,
@@ -213,18 +203,27 @@ jQuery(function ($) {
                                 appRoute = route;
                             }
                         });
-                        mask('#map', false);
+                     //   mask('#map', false);
                     }, function (err) {
                         throw err;
                     }, this); //end done
             }
         };
 
+        /**
+         * Get data
+         * @param distance
+         * @returns {boolean}
+         */
         function calculateDistancePrice(distance) {
-            if (openDialog == false) {
+          //  if (openDialog == false) {
+
+                $('#passingcargo').html('Идет загрузка...');
+                
                 $.ajax({
                     type: "GET",
                     url: ajax_object.ajaxurl,
+                    async: false,
                     data: {
                         action: 'get_price',
                         distance: lengthval,
@@ -233,7 +232,7 @@ jQuery(function ($) {
                         options: getSelectOptions(true)
                     },
                     success: function (response) {
-                        var responseJSON = JSON.parse(response);
+                        let responseJSON = JSON.parse(response);
                         $('#calc-price').html(responseJSON.result.price);
                         $('#passingcargo').html('Если груз будет попутным ' + responseJSON.result.passingcargo + ' руб.');
                         //console.log('AJAX response : ',response);
@@ -244,19 +243,21 @@ jQuery(function ($) {
                             $.alert({
                                 title: responseJSON.result.message,
                                 closeIcon: true,
-                                theme: 'supervan',
+                                theme: 'modern',
                                 content: htmlForm,
 
                                 buttons: {
                                     formSubmit: {
-                                        text: 'Отпавить',
+                                        text: 'Отправить',
                                         btnClass: 'btn-blue',
                                         action: function () {
+                                          //  openDialog = false;
                                             return sendData(this);
 
                                         },
                                         cancel: function () {
                                             //close
+                                            //openDialog = false;
                                         },
                                     }
                                 },
@@ -266,47 +267,66 @@ jQuery(function ($) {
                         }
                     }
                 });
-            }
+           // }
+            return true;
 
         };
 
 
-        function chkField(field) {
-            if (field.val().length < 1) {
-                field.css('border', 'solid 4px red');
+        /**
+         * Show in the form errors
+         * @param thisform
+         * @param selector
+         * @returns {boolean}
+         */
+        function validateField(thisform, selector, patern){
+
+            let value = thisform.$content.find(selector).val();
+
+            let regEx = new RegExp(patern);
+            let validate = regEx.test(value);
+
+            if (!validate) {
+                thisform.$content.find(selector).css('border', 'solid 2px red');
                 return false;
-            } else {
-                field.css('border', 'none');
+            }
+            else {
+                thisform.$content.find(selector).css('border', 'none');
+                return true;
             }
         }
 
+        /**
+         * Send data to server
+         * @param thisform
+         * @returns {boolean}
+         */
         function sendData(thisform) {
 
-            var apceptChk = thisform.$content.find('#apcept');
+            let apceptChk = thisform.$content.find('#apcept');
 
             if (apceptChk.prop('checked')) {
 
+            if(!validateField(thisform, '.name',
+                '^[A-Za-zА-ЯЁа-яё]{2,60}(.[A-Za-zА-ЯЁа-яё]{2,60})?(.?[A-Za-zА-ЯЁа-яё]{2,60})?$')){
+                return false;
+            }
 
-                var name = thisform.$content.find('.name').val();
-                var phone = thisform.$content.find('.phone').val();
-                var email = thisform.$content.find('.email').val();
+            if(!validateField(thisform, '.phone',
+                '^[\\d+()\\s]{7,30}$')) {
+                return false;
+            }
 
-                if (name.length < 1 ||
-                    phone.length < 1 ||
-                    email.length < 1) {
-                    return false;
-                }
+            if(!validateField(thisform, '.email',
+                '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$')) {
+                return false;
+            }
 
-                /*
-                                 var regEx = /^[A-Z0-9][A-Z0-9._%+-]{0,63}@(?:[A-Z0-9-]{1,63}.){1,125}[A-Z]{2,63}$/;
 
-                                   var validEmail = regEx.test(email);
-                                   if (!validEmail) {
-                                    thisform.$content.find('.email').css('border', 'red');
-                                    return false;
-                                   }*/
 
-                //	$('$frompay').val();
+                let name = thisform.$content.find('.name').val();
+                let phone = thisform.$content.find('.phone').val();
+                let email = thisform.$content.find('.email').val();
 
                 let formpay = "Наличный рассчет";
 
@@ -396,19 +416,6 @@ jQuery(function ($) {
             }
             if (condition == false) {
                 $('.preloader-holder').fadeOut(300);
-            }
-        }
-
-
-        function tonnaToMcub(tonna) {
-            for (var i = 0; i < tableConf.length; i++) {
-                if (tonna <= tableConf[i][0]) return tableConf[i][1];
-            }
-        }
-
-        function mcubTotonna(mCub) {
-            for (var i = 0; i < tableConf.length; i++) {
-                if (mCub <= tableConf[i][1]) return tableConf[i][0];
             }
         }
 

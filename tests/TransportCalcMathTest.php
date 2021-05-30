@@ -53,7 +53,7 @@ final class TransportCalcMathTest extends TestCase
         // МСК - СПБ (780км) 4 тонны 63 куба ?
         $this->assertEquals(
             TransportCalcMath::calculate(780, 4,63)["price"],
-            58500
+           59000// 58500
         );
     }
 
@@ -63,6 +63,14 @@ final class TransportCalcMathTest extends TestCase
         $this->assertEquals(
             TransportCalcMath::roundPrice(1999),
             2000
+        );
+    }
+
+    public function testExtremum()
+    {
+        $this->assertEquals(
+            TransportCalcMath::calculate(780, 21,121)["price"],
+            0// 58500
         );
     }
 

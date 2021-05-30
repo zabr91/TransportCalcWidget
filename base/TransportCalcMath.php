@@ -25,14 +25,21 @@ class TransportCalcMath
 
         if($distance < 0) return 0;
 
-       $price = 0;
-
        $car = self::getCarPriceByParms($distance, $weight, $volume);
       
        $priceCalc = $distance * $car->price;
 
+       if(!$priceCalc){
+           return [
+               "price" => 0,
+               'passingcargo' => 0,
+               'message' => 'Ваш запрос нуждается в уточнении, пожалуйста оставьте контакты'
+           ];
+       }
+
 
        $optionsSum = 0;
+
         if(isset($options))
         {
             foreach ($options as $value)
@@ -91,6 +98,8 @@ class TransportCalcMath
     }
 
     public static function roundPrice($price){
+
+        if($price <= 0) return 0;
 
         $newPrice = $price % 1000;
         $newPrice = $price - $newPrice;
