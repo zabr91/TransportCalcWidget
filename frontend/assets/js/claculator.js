@@ -46,9 +46,29 @@ jQuery(function ($) {
 
 
         // Enter point in app
-        if (appSettings['map']) {
-            appInit();
+        appInit();
+
+        /**
+         * Start app
+         */
+        function appInit() {
+
+            if (appSettings['map']) {
+                sendBtn.prop('disabled', true);
+                mapInit();
+            }
+
+            //off submit on keydown enter
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+
         }
+
 
 
         //on select option
@@ -88,87 +108,74 @@ jQuery(function ($) {
 
         });
 
-        /*
-		closeWindow.on("click", function(e){ 
-			e.preventDefault();
-			modalWindow.fadeOut(300);
-		});*/
 
-        /**
-         * Start app
-         */
-        function appInit() {
-
-            //off submit on keydown enter
-            $(window).keydown(function (event) {
-                if (event.keyCode == 13) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-
-            mapInit();
-        }
 
         /**
          * Init Yandex map
          */
         function mapInit() {
-            ymaps.ready(function () {
+            if (!ymaps) {
+                alert('Данные ЯндексКарт не загрузились. Перезагрузите страницу');
+            } else {
 
-                appMap = new ymaps.Map('map', {center: appSettings['center'], zoom: appSettings['zoom']});
+                ymaps.ready(function () {
 
-                appSettings['mapBehaviorsDisables'].forEach(element => appMap.behaviors.disable(element));
-                appSettings['mapControlsRemove'].forEach(element => appMap.controls.remove(element));
+                    appMap = new ymaps.Map('map', {center: appSettings['center'], zoom: appSettings['zoom']});
 
-                let timeout = null;
+                    appSettings['mapBehaviorsDisables'].forEach(element => appMap.behaviors.disable(element));
+                    appSettings['mapControlsRemove'].forEach(element => appMap.controls.remove(element));
 
-                inputFrom.on('input', function () {
-                    clearTimeout(timeout);
+                    let timeout = null;
 
-                    timeout = setTimeout(function () {
-                        routeInit();
-                    }, 1000);
+                    inputFrom.on('input', function () {
+                        clearTimeout(timeout);
+
+                        timeout = setTimeout(function () {
+                            routeInit();
+                        }, 1000);
+                        sendBtn.prop('disabled', true);
+
+                    });
+
+                    inputTo.on('input', function () {
+                        clearTimeout(timeout);
+
+                        timeout = setTimeout(function () {
+                            routeInit();
+                        }, 1000);
+                        sendBtn.prop('disabled', true);
+
+                    });
+
+                    inputVolume.bind("keyup input wheel", function () {
+                        clearTimeout(timeout);
+
+                        timeout = setTimeout(function () {
+                            calculateDistancePrice(lengthval)
+                        }, 1000);
+
+
+                    });
+
+                    inputWeight.bind("keyup input wheel", function () {
+                        clearTimeout(timeout);
+
+                        timeout = setTimeout(function () {
+                            calculateDistancePrice(lengthval)
+                        }, 1000);
+
+                    });
 
                 });
-
-                inputTo.on('input', function () {
-                    clearTimeout(timeout);
-
-                    timeout = setTimeout(function () {
-                        routeInit();
-                    }, 1000);
-
-                });
-
-                inputVolume.bind("keyup input wheel", function () {
-                    clearTimeout(timeout);
-
-                    timeout = setTimeout(function () {
-                        calculateDistancePrice(lengthval)
-                    }, 1000);
-
-
-                });
-
-                inputWeight.bind("keyup input wheel", function () {
-                    clearTimeout(timeout);
-
-                    timeout = setTimeout(function () {
-                        calculateDistancePrice(lengthval)
-                    }, 1000);
-
-                });
-
-            });
-        };
+            }
+        }
 
         /**
          * Init route in map
          */
         function routeInit() {
 
-        //    mask('#map', true);
+            //    mask('#map', true);
 
             if (inputTo.val() !== '' && inputFrom.val() !== '') {
                 ymaps.route([inputFrom.val(), inputTo.val()], {
@@ -203,7 +210,7 @@ jQuery(function ($) {
                                 appRoute = route;
                             }
                         });
-                     //   mask('#map', false);
+                        //   mask('#map', false);
                     }, function (err) {
                         throw err;
                     }, this); //end done
@@ -216,58 +223,57 @@ jQuery(function ($) {
          * @returns {boolean}
          */
         function calculateDistancePrice(distance) {
-          //  if (openDialog == false) {
+            //  if (openDialog == false) {
+            $('#passingcargo').html('Идет загрузка...');
 
-                $('#passingcargo').html('Идет загрузка...');
-                
-                $.ajax({
-                    type: "GET",
-                    url: ajax_object.ajaxurl,
-                    async: false,
-                    data: {
-                        action: 'get_price',
-                        distance: lengthval,
-                        weight: inputWeight.val(),
-                        volume: inputVolume.val(),
-                        options: getSelectOptions(true)
-                    },
-                    success: function (response) {
-                        let responseJSON = JSON.parse(response);
-                        $('#calc-price').html(responseJSON.result.price);
-                        $('#passingcargo').html('Если груз будет попутным ' + responseJSON.result.passingcargo + ' руб.');
-                        //console.log('AJAX response : ',response);
-
-
-                        if (responseJSON.result.message) {
-                            openDialog = true;
-                            $.alert({
-                                title: responseJSON.result.message,
-                                closeIcon: true,
-                                theme: 'modern',
-                                content: htmlForm,
-
-                                buttons: {
-                                    formSubmit: {
-                                        text: 'Отправить',
-                                        btnClass: 'btn-blue',
-                                        action: function () {
-                                          //  openDialog = false;
-                                            return sendData(this);
-
-                                        },
-                                        cancel: function () {
-                                            //close
-                                            //openDialog = false;
-                                        },
-                                    }
-                                },
+            $.ajax({
+                type: "GET",
+                url: ajax_object.ajaxurl,
+                async: false,
+                data: {
+                    action: 'get_price',
+                    distance: lengthval,
+                    weight: inputWeight.val(),
+                    volume: inputVolume.val(),
+                    options: getSelectOptions(true)
+                },
+                success: function (response) {
+                    let responseJSON = JSON.parse(response);
+                    $('#calc-price').html(responseJSON.result.price);
+                    $('#passingcargo').html('Если груз будет попутным ' + responseJSON.result.passingcargo + ' руб.');
+                    sendBtn.prop('disabled', false);
 
 
-                            });
-                        }
+                    if (responseJSON.result.message) {
+                        openDialog = true;
+                        $.alert({
+                            title: responseJSON.result.message,
+                            closeIcon: true,
+                            theme: 'modern',
+                            content: htmlForm,
+
+                            buttons: {
+                                formSubmit: {
+                                    text: 'Отправить',
+                                    btnClass: 'btn-blue',
+                                    action: function () {
+                                        //  openDialog = false;
+                                        return sendData(this);
+
+                                    },
+                                    cancel: function () {
+                                        //close
+                                        //openDialog = false;
+                                    },
+                                }
+                            },
+
+
+                        });
                     }
-                });
-           // }
+                }
+            });
+            // }
             return true;
 
         };
@@ -279,7 +285,7 @@ jQuery(function ($) {
          * @param selector
          * @returns {boolean}
          */
-        function validateField(thisform, selector, patern){
+        function validateField(thisform, selector, patern) {
 
             let value = thisform.$content.find(selector).val();
 
@@ -289,15 +295,14 @@ jQuery(function ($) {
             if (!validate) {
                 thisform.$content.find(selector).css('border', 'solid 2px red');
                 return false;
-            }
-            else {
+            } else {
                 thisform.$content.find(selector).css('border', 'none');
                 return true;
             }
         }
 
         /**
-         * Send data to server
+         * Send data to backend
          * @param thisform
          * @returns {boolean}
          */
@@ -307,21 +312,20 @@ jQuery(function ($) {
 
             if (apceptChk.prop('checked')) {
 
-            if(!validateField(thisform, '.name',
-                '^[A-Za-zА-ЯЁа-яё]{2,60}(.[A-Za-zА-ЯЁа-яё]{2,60})?(.?[A-Za-zА-ЯЁа-яё]{2,60})?$')){
-                return false;
-            }
+                if (!validateField(thisform, '.name',
+                    '^[A-Za-zА-ЯЁа-яё]{2,60}(.[A-Za-zА-ЯЁа-яё]{2,60})?(.?[A-Za-zА-ЯЁа-яё]{2,60})?$')) {
+                    return false;
+                }
 
-            if(!validateField(thisform, '.phone',
-                '^[\\d+()\\s]{7,30}$')) {
-                return false;
-            }
+                if (!validateField(thisform, '.phone',
+                    '^[\\d+()\\s]{7,30}$')) {
+                    return false;
+                }
 
-            if(!validateField(thisform, '.email',
-                '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$')) {
-                return false;
-            }
-
+                if (!validateField(thisform, '.email',
+                    '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$')) {
+                    return false;
+                }
 
 
                 let name = thisform.$content.find('.name').val();
@@ -375,35 +379,38 @@ jQuery(function ($) {
             return true;
         }
 
-        function getSelectOptions(data = true) {
+        /**
+         *
+         * Get selected options
+         *
+         * @param arr array or string
+         * @returns {string}
+         */
+        function getSelectOptions(arr = true) {
 
-            var calcOptionsChk = $(".calc-options:checked");
-            var countChekedOptions = calcOptionsChk.length;
+            let calcOptionsChk = $(".calc-options:checked");
+            let countChekedOptions = calcOptionsChk.length;
 
-            var options = [];
-
-            var str = '';
+            let options = [];
+            let str = '';
 
             if (countChekedOptions > 0) {
-                for (var i = 0; i < countChekedOptions; i++) {
+                for (let i = 0; i < countChekedOptions; i++) {
 
-                    if (data == true) {
+                    if (arr == true) {
                         options.push($(calcOptionsChk[i]).data());
                     } else {
                         str += $(calcOptionsChk[i]).val();
                     }
 
                 }
-
             }
 
-            if (data == true) {
+            if (arr == true) {
                 return JSON.stringify(options);
             } else {
                 return str;
             }
-
-
         }
 
         function mask(element, condition) {
